@@ -1,7 +1,7 @@
 ﻿using Revrs.Extensions;
 using Revrs.Tests.Common;
 
-namespace Revrs.Tests.ExtensionsTests.ReaderExtensionsTest;
+namespace Revrs.Tests.ExtensionsTests.ReaderExtensionsTests;
 
 public class ReaderExtensionsOperationsTests
 {
