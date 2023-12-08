@@ -12,5 +12,5 @@ public interface IStructReverser
     /// Reverses the <paramref name="buffer"/> in predefined slices to match the target <see langword="struct"/>.
     /// </summary>
     /// <param name="buffer"></param>
-    public abstract void Reverse(in Span<byte> buffer);
+    public static abstract void Reverse(in Span<byte> buffer);
 }
