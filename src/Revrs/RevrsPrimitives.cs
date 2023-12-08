@@ -1,4 +1,6 @@
-﻿namespace Revrs;
+﻿using System.Numerics;
+
+namespace Revrs;
 
 /// <summary>
 /// Byte order mark (BoM) defined as a <see langword="big-endian"/> unsigned word (<see langword="ushort"/>)
@@ -12,9 +14,10 @@ public enum Endianness : ushort
 public static class RevrsPrimitives
 {
     /// <summary>
+    /// Compare the system endianness with the provided <paramref name="endianness"/>.
     /// </summary>
     /// <returns>
-    /// <see langword="true"/> if the system <see cref="Endianness"/> matches the provided <paramref name="endianness"/>
+    /// <see langword="true"/> if the system <see cref="Endianness"/> matches the provided <paramref name="endianness"/>.
     /// </returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsSystemEndianness(this Endianness endianness)
@@ -23,9 +26,10 @@ public static class RevrsPrimitives
     }
 
     /// <summary>
+    /// Compare the system endianness with the provided <paramref name="endianness"/>.
     /// </summary>
     /// <returns>
-    /// <see langword="true"/> if the system <see cref="Endianness"/> matches the provided <paramref name="endianness"/>
+    /// <see langword="true"/> if the system <see cref="Endianness"/> <i>does not match</i> the provided <paramref name="endianness"/>.
     /// </returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsNotSystemEndianness(this Endianness endianness)
