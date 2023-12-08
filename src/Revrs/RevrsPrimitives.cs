@@ -17,8 +17,19 @@ public static class RevrsPrimitives
     /// <see langword="true"/> if the system <see cref="Endianness"/> matches the provided <paramref name="endianness"/>
     /// </returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool MatchesSystemEndianness(this Endianness endianness)
+    public static bool IsSystemEndianness(this Endianness endianness)
     {
         return BitConverter.IsLittleEndian == (endianness == Endianness.Little);
+    }
+
+    /// <summary>
+    /// </summary>
+    /// <returns>
+    /// <see langword="true"/> if the system <see cref="Endianness"/> matches the provided <paramref name="endianness"/>
+    /// </returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool IsNotSystemEndianness(this Endianness endianness)
+    {
+        return BitConverter.IsLittleEndian == (endianness == Endianness.Big);
     }
 }
