@@ -43,7 +43,7 @@ public ref struct RevrsReader(Span<byte> buffer, Endianness endianness = Endiann
     }
 
     /// <summary>
-    /// Move the reader to a static <paramref name="position"/>.
+    /// Move the reader to an absolute <paramref name="position"/>.
     /// </summary>
     /// <param name="position">The absolute position to move reader to.</param>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
