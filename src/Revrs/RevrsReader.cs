@@ -69,7 +69,7 @@ public ref struct RevrsReader(Span<byte> buffer, Endianness endianness = Endiann
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public void Align(int size)
     {
-        Position += (size - Position % size) % size;
+        Position += Position.AlignUp(size);
     }
 
     /// <summary>
@@ -79,7 +79,7 @@ public ref struct RevrsReader(Span<byte> buffer, Endianness endianness = Endiann
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public void AlignDown(int size)
     {
-        Position -= Position % size;
+        Position += Position.AlignDown(size);
     }
 
     /// <summary>
