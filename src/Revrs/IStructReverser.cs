@@ -9,8 +9,8 @@
 public interface IStructReverser
 {
     /// <summary>
-    /// Reverses the <paramref name="buffer"/> in predefined slices to match the target <see langword="struct"/>.
+    /// Reverses the <paramref name="slice"/> in predefined slices to match the target <see langword="struct"/>.
     /// </summary>
-    /// <param name="buffer"></param>
-    public static abstract void Reverse(in Span<byte> buffer);
+    /// <param name="slice"></param>
+    public static abstract void Reverse(in Span<byte> slice);
 }
