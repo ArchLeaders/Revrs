@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 namespace Revrs;
 
 /// <summary>
-/// Casts <see langword="primitive"/> and <see langword="struct"/> data types over a <see cref="Span{T}"/> of bytes, reversing the underlying <see cref="Span{T}"/> when required.
+/// Reads <see langword="primitive"/> and <see langword="struct"/> data types over a <see cref="Span{T}"/> of bytes, reversing the underlying <see cref="Span{T}"/> when required.
 /// </summary>
 public ref struct RevrsReader(Span<byte> buffer, Endianness endianness = Endianness.Big)
 {
