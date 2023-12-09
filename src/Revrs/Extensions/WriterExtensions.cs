@@ -42,7 +42,7 @@ public static class WriterExtensions
             ? stackalloc byte[size] : new byte[size];
 
         MemoryMarshal.Write(buffer, value);
-        if (endianness.IsNotSystemEndianness()) {
+        if (size > 1 && endianness.IsNotSystemEndianness()) {
             buffer.Reverse();
         }
 
@@ -70,7 +70,7 @@ public static class WriterExtensions
             ? stackalloc byte[size] : new byte[size];
 
         MemoryMarshal.Write(buffer, value);
-        if (endianness.IsNotSystemEndianness()) {
+        if (size > 1 && endianness.IsNotSystemEndianness()) {
             R.Reverse(buffer);
         }
 
