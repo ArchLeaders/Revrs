@@ -3,7 +3,7 @@
 namespace Revrs.Extensions;
 
 /// <summary>
-/// Extension methods for writing <see langword="primitive"/> and <see langword="struct"/> data types into a <see cref="Stream"/>, reversing the written values when required.
+/// Extension methods for writing unmanaged <see langword="primitive"/> and <see langword="struct"/> data types into a <see cref="Stream"/>, reversing the written values when required.
 /// </summary>
 public static class WriterExtensions
 {
@@ -14,6 +14,7 @@ public static class WriterExtensions
     /// </para>
     /// </summary>
     /// <typeparam name="T">The type to write.</typeparam>
+    /// <param name="stream">The stream to write the <paramref name="value"/> to.</param>
     /// <param name="value">The <see langword="unmanaged"/> <see langword="primitive"/> or <see langword="struct"/> value to write.</param>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static unsafe void Write<T>(this Stream stream, T value) where T : unmanaged
@@ -33,7 +34,9 @@ public static class WriterExtensions
     /// </para>
     /// </summary>
     /// <typeparam name="T">The type to write.</typeparam>
+    /// <param name="stream">The stream to write the <paramref name="value"/> to.</param>
     /// <param name="value">The <see langword="unmanaged"/> <see langword="primitive"/> value to write.</param>
+    /// <param name="endianness">The <see langword="byte-order"/> to use when writing the <paramref name="value"/>.</param>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static unsafe void Write<T>(this Stream stream, T value, Endianness endianness) where T : unmanaged
     {
@@ -61,7 +64,9 @@ public static class WriterExtensions
     /// </summary>
     /// <typeparam name="T">The type to write.</typeparam>
     /// <typeparam name="R">The <see cref="IStructReverser"/> to reverse <typeparamref name="T"/></typeparam>
+    /// <param name="stream">The stream to write the <paramref name="value"/> to.</param>
     /// <param name="value">The <see langword="unmanaged"/> <see langword="primitive"/> value to write.</param>
+    /// <param name="endianness">The <see langword="byte-order"/> to use when writing the <paramref name="value"/>.</param>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static unsafe void Write<T, R>(this Stream stream, T value, Endianness endianness) where T : unmanaged where R : IStructReverser
     {

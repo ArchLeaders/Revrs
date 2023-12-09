@@ -250,7 +250,7 @@ public ref struct RevrsReader(Span<byte> buffer, Endianness endianness = Endiann
     }
 
     /// <summary>
-    /// Local function prefered over <see cref="ReadSpan{T}(Span{byte}, int, Endianness)"/> for performance.
+    /// Local function prefered over <see cref="ReaderExtensions.ReadSpan{T}(Span{byte}, int, Endianness)"/> for performance.
     /// </summary>
     /// <returns></returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -266,7 +266,7 @@ public ref struct RevrsReader(Span<byte> buffer, Endianness endianness = Endiann
     }
 
     /// <summary>
-    /// Local function prefered over <see cref="ReadSpan{T, R}(Span{byte}, int, Endianness)"/> for performance.
+    /// Local function prefered over <see cref="ReaderExtensions.ReadSpan{T, R}(Span{byte}, int, Endianness)"/> for performance.
     /// </summary>
     /// <returns></returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

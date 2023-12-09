@@ -10,11 +10,20 @@ public class RevrsWriter
     private readonly Stream _stream;
     private readonly Endianness _endianness;
 
+    /// <summary>
+    /// The current position of the stream.
+    /// </summary>
     public long Position {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         get => _stream.Position;
     }
 
+    /// <summary>
+    /// Create a new <see cref="RevrsWriter"/> from a <paramref name="stream"/> using the provided <paramref name="endianness"/>.
+    /// </summary>
+    /// <param name="stream"></param>
+    /// <param name="endianness"></param>
+    /// <exception cref="InvalidOperationException"></exception>
     public RevrsWriter(in Stream stream, Endianness endianness)
     {
         if (!stream.CanWrite) {

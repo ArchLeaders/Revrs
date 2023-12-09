@@ -7,10 +7,20 @@ namespace Revrs;
 /// </summary>
 public enum Endianness : ushort
 {
+    /// <summary>
+    /// Big Endian Byte order
+    /// </summary>
     Big = 0xFEFF,
+
+    /// <summary>
+    /// Little Endian Byte Order
+    /// </summary>
     Little = 0xFFFE,
 }
 
+/// <summary>
+/// Primitive extension methods used by <see cref="Revrs"/>.
+/// </summary>
 public static class RevrsPrimitives
 {
     /// <summary>
