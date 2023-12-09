@@ -47,6 +47,32 @@ public class ReaderExtensionsOperationsTests
     }
 
     [Fact]
+    public void ReadSpanWithCount_ShouldTruncateResullt()
+    {
+        Span<byte> input = [
+            0xFF, 0x7F,
+            0x7F, 0xFF,
+            0xFF, 0x7F,
+            0x7F, 0xFF,
+        ];
+
+        input.ReadSpan<ushort>(3).Length.Should().Be(3);
+    }
+
+    [Fact]
+    public void ReadSpan_ShouldNotTruncateResult()
+    {
+        Span<byte> input = [
+            0xFF, 0x7F,
+            0x7F, 0xFF,
+            0xFF, 0x7F,
+            0x7F, 0xFF,
+        ];
+
+        input.ReadSpan<ushort>().Length.Should().Be(4);
+    }
+
+    [Fact]
     public void ReadPrimitive_ShouldBeEndianNeutral()
     {
         Span<byte> inputA = [ 0x01, 0x00 ];
