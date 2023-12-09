@@ -4,22 +4,24 @@ using System.Runtime.InteropServices;
 namespace Revrs;
 
 /// <summary>
-/// Reads <see langword="primitive"/> and <see langword="struct"/> data types over a <see cref="Span{T}"/> of bytes, reversing the underlying <see cref="Span{T}"/> when required.
+/// Reads <see langword="unmanaged"/> <see langword="primitive"/> and <see langword="struct"/> data types over a <see cref="Span{T}"/> of bytes, reversing the underlying <see cref="Span{T}"/> when required.
 /// </summary>
-public ref struct RevrsReader(Span<byte> buffer, Endianness endianness = Endianness.Big)
+/// <param name="data">A <see cref="Span{T}"/> over the data buffer.</param>
+/// <param name="endianness">The target <see langword="byte-order"/> of the <see cref="RevrsReader"/>.</param>
+public ref struct RevrsReader(Span<byte> data, Endianness endianness = Endianness.Big)
 {
     /// <summary>
-    /// A <see cref="Span{T}"/> over the input buffer.
+    /// A <see cref="Span{T}"/> over the data buffer.
     /// </summary>
-    public readonly Span<byte> Data = buffer;
+    public readonly Span<byte> Data = data;
 
     /// <summary>
-    /// The target <see langword="byte-order"/> of the reader.
+    /// The target <see langword="byte-order"/> of the <see cref="RevrsReader"/>.
     /// </summary>
     public Endianness Endianness = endianness;
 
     /// <summary>
-    /// The current position of the reader.
+    /// The current position of the <see cref="RevrsReader"/>.
     /// </summary>
     public int Position = 0;
 

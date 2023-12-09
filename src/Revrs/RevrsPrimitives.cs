@@ -3,17 +3,17 @@
 namespace Revrs;
 
 /// <summary>
-/// Byte order mark (BoM) defined as a <see langword="big-endian"/> unsigned word (<see langword="ushort"/>)
+/// Byte order mark (BoM) defined as a <see langword="big-endian"/> unsigned word (<see langword="ushort"/>).
 /// </summary>
 public enum Endianness : ushort
 {
     /// <summary>
-    /// Big Endian Byte order
+    /// Big Endian Byte order.
     /// </summary>
     Big = 0xFEFF,
 
     /// <summary>
-    /// Little Endian Byte Order
+    /// Little Endian Byte Order.
     /// </summary>
     Little = 0xFFFE,
 }
@@ -48,11 +48,11 @@ public static class RevrsPrimitives
     }
 
     /// <summary>
-    /// Align <paramref name="value"/> up to <paramref name="size"/> and return the result
+    /// Align <paramref name="value"/> up to <paramref name="size"/> and return the result.
     /// </summary>
-    /// <typeparam name="T">The integral type to return</typeparam>
-    /// <param name="value">The value to align</param>
-    /// <param name="size">The alignment size</param>
+    /// <typeparam name="T">The integral type to return.</typeparam>
+    /// <param name="value">The value to align.</param>
+    /// <param name="size">The alignment size.</param>
     /// <returns></returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static T AlignUp<T>(this T value, T size) where T : ISubtractionOperators<T, T, T>, IModulusOperators<T, T, T>
@@ -61,11 +61,11 @@ public static class RevrsPrimitives
     }
 
     /// <summary>
-    /// Align <paramref name="value"/> down to <paramref name="size"/> and return the result
+    /// Align <paramref name="value"/> down to <paramref name="size"/> and return the result.
     /// </summary>
-    /// <typeparam name="T">The integral type to return</typeparam>
-    /// <param name="value">The value to align</param>
-    /// <param name="size">The alignment size</param>
+    /// <typeparam name="T">The integral type to return.</typeparam>
+    /// <param name="value">The value to align.</param>
+    /// <param name="size">The alignment size.</param>
     /// <returns></returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static T AlignDown<T>(this T value, T size) where T : IUnaryNegationOperators<T, T>, IModulusOperators<T, T, T>

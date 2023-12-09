@@ -14,6 +14,7 @@ public static class ReaderExtensions
     /// </para>
     /// </summary>
     /// <typeparam name="T">The primitive or struct type to read.</typeparam>
+    /// <param name="stream">The stream to read from.</param>
     /// <returns>A new instance of <typeparamref name="T"/> parsed from the <paramref name="stream"/>.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public unsafe static T Read<T>(this Stream stream) where T : unmanaged
@@ -30,6 +31,7 @@ public static class ReaderExtensions
     /// Read <typeparamref name="T"/> from the provided <paramref name="slice"/> in the system endianness.
     /// </summary>
     /// <typeparam name="T">The primitive or struct type to read.</typeparam>
+    /// <param name="slice">The data to read from.</param>
     /// <returns>A reference to <typeparamref name="T"/> over a span of data.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static ref T Read<T>(this Span<byte> slice) where T : unmanaged
@@ -48,6 +50,8 @@ public static class ReaderExtensions
     /// </para>
     /// </summary>
     /// <typeparam name="T">The primitive type to read.</typeparam>
+    /// <param name="stream">The stream to read from.</param>
+    /// <param name="endianness">The <see langword="byte-order"/> to use when reading the <paramref name="stream"/>.</param>
     /// <returns>A new instance of <typeparamref name="T"/> parsed from the <paramref name="stream"/>.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public unsafe static T Read<T>(this Stream stream, Endianness endianness) where T : unmanaged
@@ -72,6 +76,8 @@ public static class ReaderExtensions
     /// </para>
     /// </summary>
     /// <typeparam name="T">The primitive type to read.</typeparam>
+    /// <param name="slice">The data to read from.</param>
+    /// <param name="endianness">The <see langword="byte-order"/> to use when reading the <paramref name="slice"/>.</param>
     /// <returns>A reference to <typeparamref name="T"/> over a span of data.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static ref T Read<T>(this Span<byte> slice, Endianness endianness) where T : unmanaged
@@ -95,6 +101,8 @@ public static class ReaderExtensions
     /// </summary>
     /// <typeparam name="T">The struct to read</typeparam>
     /// <typeparam name="R">The <see cref="IStructReverser"/> to reverse <typeparamref name="T"/></typeparam>
+    /// <param name="stream">The stream to read from.</param>
+    /// <param name="endianness">The <see langword="byte-order"/> to use when reading the <paramref name="stream"/>.</param>
     /// <returns>A new instance of <typeparamref name="T"/> parsed from the <paramref name="stream"/>.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public unsafe static T Read<T, R>(this Stream stream, Endianness endianness) where T : unmanaged where R : IStructReverser
@@ -120,6 +128,8 @@ public static class ReaderExtensions
     /// </summary>
     /// <typeparam name="T">The struct to read</typeparam>
     /// <typeparam name="R">The <see cref="IStructReverser"/> to reverse <typeparamref name="T"/></typeparam>
+    /// <param name="slice">The data to read from.</param>
+    /// <param name="endianness">The <see langword="byte-order"/> to use when reading the <paramref name="slice"/>.</param>
     /// <returns>A reference to <typeparamref name="T"/> over a span of data.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static ref T Read<T, R>(this Span<byte> slice, Endianness endianness) where T : unmanaged where R : IStructReverser
@@ -132,10 +142,11 @@ public static class ReaderExtensions
     }
 
     /// <summary>
-    /// Read <typeparamref name="T"/>'s from the provided <paramref name="slice"/> until the end of the slice in the system endianness.
+    /// Read <typeparamref name="T"/>'s from the provided <paramref name="slice"/> in the system <see cref="Endianness"/> until the end of the <paramref name="slice"/>.
     /// </summary>
-    /// <typeparam name="T">The <see langword="primitive"/> or <see langword="unmanaged"/> <see langword="struct"/> type to read</typeparam>
-    /// <returns>A <see cref="Span{T}"/> where the length is the <paramref name="slice"/> length / <see langword="sizeof"/>(<typeparamref name="T"/>).</returns>
+    /// <typeparam name="T">The <see langword="unmanaged"/> <see langword="primitive"/> or <see langword="struct"/> type to read</typeparam>
+    /// <param name="slice">The data to read from.</param>
+    /// <returns>A new <see cref="Span{T}"/> where the length is the <paramref name="slice"/> length / <see langword="sizeof"/>(<typeparamref name="T"/>).</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Span<T> ReadSpan<T>(this Span<byte> slice) where T : unmanaged
     {
@@ -145,8 +156,8 @@ public static class ReaderExtensions
     /// <summary>
     /// Read <paramref name="count"/> <typeparamref name="T"/>'s from the provided <paramref name="slice"/> in the system endianness.
     /// </summary>
-    /// <typeparam name="T">The <see langword="primitive"/> or <see langword="unmanaged"/> <see langword="struct"/> type to read</typeparam>
-    /// <param name="slice">The slice of data to read from.</param>
+    /// <typeparam name="T">The <see langword="primitive"/> or <see langword="unmanaged"/> <see langword="struct"/> type to read.</typeparam>
+    /// <param name="slice">The data to read from.</param>
     /// <param name="count">The expected number of <typeparamref name="T"/> to read.</param>
     /// <returns>A <see cref="Span{T}"/> where the length of the <see cref="Span{T}"/> is <paramref name="count"/>.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -159,11 +170,11 @@ public static class ReaderExtensions
     /// Read <paramref name="count"/> <typeparamref name="T"/>'s from the provided <paramref name="slice"/> in the provided <paramref name="endianness"/>.
     /// <para>
     /// <b>Warning: </b> Only read <a href="https://learn.microsoft.com/en-us/dotnet/api/system.type.isprimitive">primitive types</a>
-    /// with this method, the entire buffer slice is reversed when endian swapping is required.
+    /// with this method, the entire <paramref name="slice"/> is reversed when endian swapping is required.
     /// </para>
     /// </summary>
-    /// <typeparam name="T">The primitive type to read</typeparam>
-    /// <param name="slice">The slice of data to read from.</param>
+    /// <typeparam name="T">The <see langword="unmanaged"/> <see langword="primitive"/> type to read.</typeparam>
+    /// <param name="slice">The data to read from.</param>
     /// <param name="count">The number of <typeparamref name="T"/> to read.</param>
     /// <param name="endianness">The <see langword="byte-order"/> to use when reading the <paramref name="slice"/>.</param>
     /// <returns>A <see cref="Span{T}"/> where the length of the <see cref="Span{T}"/> is <paramref name="count"/>.</returns>
@@ -189,7 +200,7 @@ public static class ReaderExtensions
     /// </summary>
     /// <typeparam name="T">The struct to read</typeparam>
     /// <typeparam name="R">The <see cref="IStructReverser"/> to reverse <typeparamref name="T"/></typeparam>
-    /// <param name="slice">The slice of data to read from.</param>
+    /// <param name="slice">The data to read from.</param>
     /// <param name="count">The number of <typeparamref name="T"/> to read.</param>
     /// <param name="endianness">The <see langword="byte-order"/> to use when reading the <paramref name="slice"/>.</param>
     /// <returns>A <see cref="Span{T}"/> where the length of the <see cref="Span{T}"/> is <paramref name="count"/>.</returns>

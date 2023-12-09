@@ -6,7 +6,6 @@
     <Nullable>enable</Nullable>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
-    <DocumentationFile>F:\Software\Libraries\Common\Revrs\docs\Revrs.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
