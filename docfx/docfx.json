@@ -1,0 +1,50 @@
+{
+  "metadata": [
+    {
+      "src": [
+        {
+          "src": "../src",
+          "files": [
+            "**/*.csproj"
+          ],
+          "exclude": [
+            "**/*.Tests.csproj"
+          ]
+        }
+      ],
+      "dest": "api"
+    }
+  ],
+  "build": {
+    "content": [
+      {
+        "files": [
+          "**/*.{md,yml}"
+        ],
+        "exclude": [
+          "_site/**"
+        ]
+      }
+    ],
+    "resource": [
+      {
+        "files": [
+          "images/**"
+        ]
+      }
+    ],
+    "output": "_site",
+    "template": [
+      "default",
+      "modern"
+    ],
+    "globalMetadata": {
+      "_appName": "Revrs",
+      "_appTitle": "Home",
+      "_enableSearch": true,
+      "_appLogoPath": "images/icon.svg",
+      "_appFaviconPath": "images/favicon.ico",
+      "pdf": true
+    }
+  }
+}
