@@ -5,14 +5,60 @@ namespace Revrs.Extensions;
 public static class ReaderExtensions
 {
     /// <summary>
+    /// Read <typeparamref name="T"/> from the provided <paramref name="stream"/> in the system endianness.
+    /// <para>
+    /// <b>Note:</b> Reading types larger than 500 KB will allocate a buffer on the heap.
+    /// </para>
+    /// </summary>
+    /// <typeparam name="T">The primitive or struct type to read.</typeparam>
+    /// <returns>A new instance of <typeparamref name="T"/> parsed from the <paramref name="stream"/>.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public unsafe static T Read<T>(this Stream stream) where T : unmanaged
+    {
+        int size = sizeof(T);
+        Span<byte> buffer = size <= 500_000
+            ? stackalloc byte[size] : new byte[size];
+
+        stream.Read(buffer);
+        return MemoryMarshal.Read<T>(buffer);
+    }
+
+    /// <summary>
     /// Read <typeparamref name="T"/> from the provided <paramref name="slice"/> in the system endianness.
     /// </summary>
     /// <typeparam name="T">The primitive or struct type to read.</typeparam>
     /// <returns>A reference to <typeparamref name="T"/> over a span of data.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static ref T Read<T>(this Span<byte> slice) where T : struct
+    public static ref T Read<T>(this Span<byte> slice) where T : unmanaged
     {
         return ref MemoryMarshal.Cast<byte, T>(slice)[0];
+    }
+
+    /// <summary>
+    /// Read <typeparamref name="T"/> from the provided <paramref name="stream"/> in the provided <paramref name="endianness"/>.
+    /// <para>
+    /// <b>Warning: </b> Only read <a href="https://learn.microsoft.com/en-us/dotnet/api/system.type.isprimitive">primitive types</a>
+    /// with this method, the entire buffer slice is reversed when endian swapping is required.
+    /// </para>
+    /// <para>
+    /// <b>Note:</b> Reading types larger than 500 KB will allocate a buffer on the heap.
+    /// </para>
+    /// </summary>
+    /// <typeparam name="T">The primitive type to read.</typeparam>
+    /// <returns>A new instance of <typeparamref name="T"/> parsed from the <paramref name="stream"/>.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public unsafe static T Read<T>(this Stream stream, Endianness endianness) where T : unmanaged
+    {
+        int size = sizeof(T);
+        Span<byte> buffer = size <= 500_000
+            ? stackalloc byte[size] : new byte[size];
+
+        stream.Read(buffer);
+        if (size > 1 && endianness.IsNotSystemEndianness()) {
+            buffer.Reverse();
+        }
+
+        return MemoryMarshal.Read<T>(buffer);
     }
 
     /// <summary>
@@ -32,6 +78,34 @@ public static class ReaderExtensions
         }
 
         return ref MemoryMarshal.Cast<byte, T>(slice)[0];
+    }
+
+    /// <summary>
+    /// Read <typeparamref name="T"/> from the provided <paramref name="slice"/> in the provided <paramref name="endianness"/>.
+    /// <para>
+    /// <typeparamref name="R"/>, implementing <see cref="IStructReverser.Reverse(in Span{byte})"/>,
+    /// will be used to reverse the buffer slice when endian swapping is required.
+    /// </para>
+    /// <para>
+    /// <b>Note:</b> Reading types larger than 500 KB will allocate a buffer on the heap.
+    /// </para>
+    /// </summary>
+    /// <typeparam name="T">The struct to read</typeparam>
+    /// <typeparam name="R">The <see cref="IStructReverser"/> to reverse <typeparamref name="T"/></typeparam>
+    /// <returns>A new instance of <typeparamref name="T"/> parsed from the <paramref name="stream"/>.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public unsafe static T Read<T, R>(this Stream stream, Endianness endianness) where T : unmanaged where R : IStructReverser
+    {
+        int size = sizeof(T);
+        Span<byte> buffer = size <= 500_000
+            ? stackalloc byte[size] : new byte[size];
+
+        stream.Read(buffer);
+        if (size > 1 && endianness.IsNotSystemEndianness()) {
+            R.Reverse(buffer);
+        }
+
+        return MemoryMarshal.Read<T>(buffer);
     }
 
     /// <summary>
