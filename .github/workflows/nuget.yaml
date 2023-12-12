@@ -12,7 +12,7 @@ env:
   description: |-
     A zero-allocation endian neutral binary IO utility.
   readme: ./Readme.md
-  icon: ../../icon.png
+  icon: ./icon.png
   repo: https://github.com/ArchLeaders/Revrs
   spdx: MIT
   tags: binary;io;zero-allocation
