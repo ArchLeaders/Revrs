@@ -124,6 +124,20 @@ public ref struct RevrsReader(Span<byte> data, Endianness endianness = Endiannes
     }
 
     /// <summary>
+    /// Reverse <typeparamref name="T"/> from the readers current position and advance forward by <see langword="sizeof"/>(<typeparamref name="T"/>).
+    /// <para>
+    /// <b>Warning: </b> Only reverse <a href="https://learn.microsoft.com/en-us/dotnet/api/system.type.isprimitive">primitive types</a>
+    /// with this method, the entire buffer slice is reversed.
+    /// </para>
+    /// </summary>
+    /// <typeparam name="T">The primitive type to reverse.</typeparam>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public unsafe void Reverse<T>() where T : unmanaged
+    {
+        Data[Position..(Position += sizeof(T))].Reverse();
+    }
+
+    /// <summary>
     /// Read <typeparamref name="T"/> from the provided <paramref name="offset"/> and advance forward by <see langword="sizeof"/>(<typeparamref name="T"/>).
     /// <para>
     /// <b>Warning: </b> Only read <a href="https://learn.microsoft.com/en-us/dotnet/api/system.type.isprimitive">primitive types</a>
@@ -141,14 +155,29 @@ public ref struct RevrsReader(Span<byte> data, Endianness endianness = Endiannes
     }
 
     /// <summary>
+    /// Reverse <typeparamref name="T"/> from the provided <paramref name="offset"/> and advance forward by <see langword="sizeof"/>(<typeparamref name="T"/>).
+    /// <para>
+    /// <b>Warning: </b> Only read <a href="https://learn.microsoft.com/en-us/dotnet/api/system.type.isprimitive">primitive types</a>
+    /// with this method, the entire buffer slice is reversed.
+    /// </para>
+    /// </summary>
+    /// <typeparam name="T">The primitive type to reverse.</typeparam>
+    /// <param name="offset">The absolue position to start reversing the struct.</param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public unsafe void Reverse<T>(int offset) where T : unmanaged
+    {
+        Data[offset..(Position = offset + sizeof(T))].Reverse();
+    }
+
+    /// <summary>
     /// Read <typeparamref name="T"/> from the readers current position and advance forward by <see langword="sizeof"/>(<typeparamref name="T"/>).
     /// <para>
     /// <typeparamref name="R"/>, implementing <see cref="IStructReverser.Reverse(in Span{byte})"/>,
     /// will be used to reverse the buffer slice when endian swapping is required.
     /// </para>
     /// </summary>
-    /// <typeparam name="T">The struct to read</typeparam>
-    /// <typeparam name="R">The <see cref="IStructReverser"/> to reverse <typeparamref name="T"/></typeparam>
+    /// <typeparam name="T">The struct to read.</typeparam>
+    /// <typeparam name="R">The <see cref="IStructReverser"/> to reverse <typeparamref name="T"/>.</typeparam>
     /// <returns>A reference to <typeparamref name="T"/> over a span of data.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public unsafe ref T Read<T, R>() where T : unmanaged where R : IStructReverser
@@ -158,14 +187,29 @@ public ref struct RevrsReader(Span<byte> data, Endianness endianness = Endiannes
     }
 
     /// <summary>
+    /// Reverse <typeparamref name="T"/> from the readers current position and advance forward by <see langword="sizeof"/>(<typeparamref name="T"/>).
+    /// <para>
+    /// <typeparamref name="R"/>, implementing <see cref="IStructReverser.Reverse(in Span{byte})"/>,
+    /// will be used to reverse the buffer slice.
+    /// </para>
+    /// </summary>
+    /// <typeparam name="T">The struct to reverse.</typeparam>
+    /// <typeparam name="R">The <see cref="IStructReverser"/> to reverse <typeparamref name="T"/>.</typeparam>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public unsafe void Reverse<T, R>() where T : unmanaged where R : IStructReverser
+    {
+        R.Reverse(Data[Position..(Position += sizeof(T))]);
+    }
+
+    /// <summary>
     /// Read <typeparamref name="T"/> from the provided <paramref name="offset"/> and advance forward by <see langword="sizeof"/>(<typeparamref name="T"/>).
     /// <para>
     /// <typeparamref name="R"/>, implementing <see cref="IStructReverser.Reverse(in Span{byte})"/>,
     /// will be used to reverse the buffer slice when endian swapping is required.
     /// </para>
     /// </summary>
-    /// <typeparam name="T">The struct to read</typeparam>
-    /// <typeparam name="R">The <see cref="IStructReverser"/> to reverse <typeparamref name="T"/></typeparam>
+    /// <typeparam name="T">The struct to read.</typeparam>
+    /// <typeparam name="R">The <see cref="IStructReverser"/> to reverse <typeparamref name="T"/>.</typeparam>
     /// <param name="offset">The absolue position to start reading the struct.</param>
     /// <returns>A reference to <typeparamref name="T"/> over a span of data.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -176,13 +220,29 @@ public ref struct RevrsReader(Span<byte> data, Endianness endianness = Endiannes
     }
 
     /// <summary>
+    /// Reverse <typeparamref name="T"/> from the provided <paramref name="offset"/> and advance forward by <see langword="sizeof"/>(<typeparamref name="T"/>).
+    /// <para>
+    /// <typeparamref name="R"/>, implementing <see cref="IStructReverser.Reverse(in Span{byte})"/>,
+    /// will be used to reverse the buffer slice.
+    /// </para>
+    /// </summary>
+    /// <typeparam name="T">The struct to reverse.</typeparam>
+    /// <typeparam name="R">The <see cref="IStructReverser"/> to reverse <typeparamref name="T"/>.</typeparam>
+    /// <param name="offset">The absolue position to start reversing the struct.</param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public unsafe void Reverse<T, R>(int offset) where T : unmanaged where R : IStructReverser
+    {
+        R.Reverse(Data[offset..(Position = offset + sizeof(T))]);
+    }
+
+    /// <summary>
     /// Read <paramref name="count"/> <typeparamref name="T"/>'s from the readers current position and advance forward by <see langword="sizeof"/>(<typeparamref name="T"/>) * <paramref name="count"/>.
     /// <para>
     /// <b>Warning: </b> Only read <a href="https://learn.microsoft.com/en-us/dotnet/api/system.type.isprimitive">primitive types</a>
     /// with this method, the entire buffer slice is reversed when endian swapping is required.
     /// </para>
     /// </summary>
-    /// <typeparam name="T">The primitive type to read</typeparam>
+    /// <typeparam name="T">The primitive type to read.</typeparam>
     /// <param name="count">The number of <typeparamref name="T"/> to read.</param>
     /// <returns>A <see cref="Span{T}"/> where the length of the <see cref="Span{T}"/> is <paramref name="count"/>.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -191,6 +251,22 @@ public ref struct RevrsReader(Span<byte> data, Endianness endianness = Endiannes
         int size = sizeof(T);
         Span<byte> slice = Data[Position..(Position += count * size)];
         return ReadSpan<T>(slice, count, size);
+    }
+
+    /// <summary>
+    /// Reverse <paramref name="count"/> <typeparamref name="T"/>'s from the readers current position and advance forward by <see langword="sizeof"/>(<typeparamref name="T"/>) * <paramref name="count"/>.
+    /// <para>
+    /// <b>Warning: </b> Only reverse <a href="https://learn.microsoft.com/en-us/dotnet/api/system.type.isprimitive">primitive types</a>
+    /// with this method, the entire buffer slice is reversed.
+    /// </para>
+    /// </summary>
+    /// <typeparam name="T">The primitive type to reverse.</typeparam>
+    /// <param name="count">The number of <typeparamref name="T"/> to reverse.</param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public unsafe void ReverseSpan<T>(int count) where T : unmanaged
+    {
+        int size = sizeof(T);
+        ReverserExtension.ReverseSpan<T>(Data[Position..(Position += count * size)], count, size);
     }
 
     /// <summary>
@@ -213,14 +289,31 @@ public ref struct RevrsReader(Span<byte> data, Endianness endianness = Endiannes
     }
 
     /// <summary>
+    /// Reverse <paramref name="count"/> <typeparamref name="T"/>'s from the provided <paramref name="offset"/> and advance forward by <see langword="sizeof"/>(<typeparamref name="T"/>) * <paramref name="count"/>.
+    /// <para>
+    /// <b>Warning: </b> Only reverse <a href="https://learn.microsoft.com/en-us/dotnet/api/system.type.isprimitive">primitive types</a>
+    /// with this method, the entire buffer slice is reversed.
+    /// </para>
+    /// </summary>
+    /// <typeparam name="T">The primitive type to reverse.</typeparam>
+    /// <param name="count">The number of <typeparamref name="T"/> to reverse.</param>
+    /// /// <param name="offset">The absolue position to start reversing the primitives.</param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public unsafe void ReverseSpan<T>(int count, int offset) where T : unmanaged
+    {
+        int size = sizeof(T);
+        ReverserExtension.ReverseSpan<T>(Data[offset..(Position = offset + count * size)], count, size);
+    }
+
+    /// <summary>
     /// Read <paramref name="count"/> <typeparamref name="T"/>'s from the readers current position and advance forward by <see langword="sizeof"/>(<typeparamref name="T"/>) * <paramref name="count"/>.
     /// <para>
     /// <typeparamref name="R"/>, implementing <see cref="IStructReverser.Reverse(in Span{byte})"/>,
     /// will be used to reverse the buffer slice when endian swapping is required.
     /// </para>
     /// </summary>
-    /// <typeparam name="T">The struct to read</typeparam>
-    /// <typeparam name="R">The <see cref="IStructReverser"/> to reverse <typeparamref name="T"/></typeparam>
+    /// <typeparam name="T">The struct to read.</typeparam>
+    /// <typeparam name="R">The <see cref="IStructReverser"/> to reverse <typeparamref name="T"/>.</typeparam>
     /// <param name="count">The number of <typeparamref name="T"/> to read.</param>
     /// <returns>A <see cref="Span{T}"/> where the length of the <see cref="Span{T}"/> is <paramref name="count"/>.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -229,6 +322,23 @@ public ref struct RevrsReader(Span<byte> data, Endianness endianness = Endiannes
         int size = sizeof(T);
         Span<byte> slice = Data[Position..(Position += count * size)];
         return ReadSpan<T, R>(slice, count, size);
+    }
+
+    /// <summary>
+    /// Reverse <paramref name="count"/> <typeparamref name="T"/>'s from the readers current position and advance forward by <see langword="sizeof"/>(<typeparamref name="T"/>) * <paramref name="count"/>.
+    /// <para>
+    /// <typeparamref name="R"/>, implementing <see cref="IStructReverser.Reverse(in Span{byte})"/>,
+    /// will be used to reverse the buffer slice.
+    /// </para>
+    /// </summary>
+    /// <typeparam name="T">The struct to reverse.</typeparam>
+    /// <typeparam name="R">The <see cref="IStructReverser"/> to reverse <typeparamref name="T"/></typeparam>
+    /// <param name="count">The number of <typeparamref name="T"/> to read.</param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public unsafe void ReverseSpan<T, R>(int count) where T : unmanaged where R : IStructReverser
+    {
+        int size = sizeof(T);
+        ReverserExtension.ReverseSpan<T, R>(Data[Position..(Position += count * size)], count, size);
     }
 
     /// <summary>
@@ -249,6 +359,24 @@ public ref struct RevrsReader(Span<byte> data, Endianness endianness = Endiannes
         int size = sizeof(T);
         Span<byte> slice = Data[offset..(Position = offset + count * size)];
         return ReadSpan<T, R>(slice, count, size);
+    }
+
+    /// <summary>
+    /// Reverse <paramref name="count"/> <typeparamref name="T"/>'s from the provided <paramref name="offset"/> and advance forward by <see langword="sizeof"/>(<typeparamref name="T"/>) * <paramref name="count"/>.
+    /// <para>
+    /// <typeparamref name="R"/>, implementing <see cref="IStructReverser.Reverse(in Span{byte})"/>,
+    /// will be used to reverse the buffer slice.
+    /// </para>
+    /// </summary>
+    /// <typeparam name="T">The struct to reverse.</typeparam>
+    /// <typeparam name="R">The <see cref="IStructReverser"/> to reverse <typeparamref name="T"/></typeparam>
+    /// <param name="count">The number of <typeparamref name="T"/> to read.</param>
+    /// <param name="offset">The absolue position to start reading the structs.</param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public unsafe void ReverseSpan<T, R>(int count, int offset) where T : unmanaged where R : IStructReverser
+    {
+        int size = sizeof(T);
+        ReverserExtension.ReverseSpan<T, R>(Data[offset..(Position = offset + count * size)], count, size);
     }
 
     /// <summary>
