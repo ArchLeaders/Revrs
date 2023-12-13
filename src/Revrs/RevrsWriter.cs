@@ -8,7 +8,11 @@ namespace Revrs;
 public class RevrsWriter
 {
     private readonly Stream _stream;
-    private readonly Endianness _endianness;
+
+    /// <summary>
+    /// The target <see langword="byte-order"/> of the <see cref="RevrsWriter"/>.
+    /// </summary>
+    public readonly Endianness Endianness;
 
     /// <summary>
     /// The current position of the stream.
@@ -35,7 +39,7 @@ public class RevrsWriter
         }
 
         _stream = stream;
-        _endianness = endianness;
+        Endianness = endianness;
     }
 
     /// <summary>
@@ -99,7 +103,7 @@ public class RevrsWriter
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public unsafe void Write<T>(T value) where T : unmanaged
     {
-        WriterExtensions.Write(_stream, value, _endianness);
+        WriterExtensions.Write(_stream, value, Endianness);
     }
 
     /// <summary>
@@ -118,6 +122,6 @@ public class RevrsWriter
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public unsafe void Write<T, R>(T value) where T : unmanaged where R : IStructReverser
     {
-        WriterExtensions.Write<T, R>(_stream, value, _endianness);
+        WriterExtensions.Write<T, R>(_stream, value, Endianness);
     }
 }
