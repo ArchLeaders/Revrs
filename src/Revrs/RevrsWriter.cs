@@ -1,4 +1,7 @@
 ﻿using Revrs.Extensions;
+using System.Buffers.Binary;
+using System.Runtime.InteropServices.Marshalling;
+using System.Runtime.InteropServices;
 
 namespace Revrs;
 
@@ -123,5 +126,35 @@ public class RevrsWriter
     public unsafe void Write<T, R>(T value) where T : unmanaged where R : IStructReverser
     {
         WriterExtensions.Write<T, R>(_stream, value, Endianness);
+    }
+
+    /// <summary>
+    /// Write the provided <see langword="managed"/> <see cref="string"/> as a UTF-8 unmanaged <see cref="byte"/>[] and advance the stream by the <paramref name="value"/> length.
+    /// </summary>
+    /// <param name="value">The managed <see cref="string"/> to write.</param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public unsafe void WriteStringUtf8(string value)
+    {
+        byte* ptr = Utf8StringMarshaller.ConvertToUnmanaged(value);
+        Span<byte> buffer = new(ptr, value.Length);
+        _stream.Write(buffer);
+    }
+
+    /// <summary>
+    /// Write the provided <see langword="managed"/> <see cref="string"/> as a UTF-16 unmanaged <see cref="ushort"/>[] and advance the stream by the <paramref name="value"/> length.
+    /// </summary>
+    /// <param name="value">The managed <see cref="string"/> to write.</param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public unsafe void WriteStringUtf16(string value)
+    {
+        ushort* ptr = Utf16StringMarshaller.ConvertToUnmanaged(value);
+        if (Endianness.IsNotSystemEndianness()) {
+            for (int i = 0; i < value.Length; i++) {
+                ptr[i] = BinaryPrimitives.ReverseEndianness(ptr[i]);
+            }
+        }
+
+        Span<ushort> buffer = new(ptr, value.Length);
+        _stream.Write(MemoryMarshal.Cast<ushort, byte>(buffer));
     }
 }
