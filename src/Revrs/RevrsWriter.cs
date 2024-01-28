@@ -2,6 +2,7 @@
 using System.Buffers.Binary;
 using System.Runtime.InteropServices.Marshalling;
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace Revrs;
 
@@ -136,7 +137,7 @@ public class RevrsWriter
     public unsafe void WriteStringUtf8(string value)
     {
         byte* ptr = Utf8StringMarshaller.ConvertToUnmanaged(value);
-        Span<byte> buffer = new(ptr, value.Length);
+        Span<byte> buffer = new(ptr, Encoding.UTF8.GetByteCount(value));
         _stream.Write(buffer);
     }
 
@@ -147,14 +148,15 @@ public class RevrsWriter
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public unsafe void WriteStringUtf16(string value)
     {
+        int length = Encoding.Unicode.GetByteCount(value) / 2;
         ushort* ptr = Utf16StringMarshaller.ConvertToUnmanaged(value);
         if (Endianness.IsNotSystemEndianness()) {
-            for (int i = 0; i < value.Length; i++) {
+            for (int i = 0; i < length; i++) {
                 ptr[i] = BinaryPrimitives.ReverseEndianness(ptr[i]);
             }
         }
 
-        Span<ushort> buffer = new(ptr, value.Length);
+        Span<ushort> buffer = new(ptr, length);
         _stream.Write(MemoryMarshal.Cast<ushort, byte>(buffer));
     }
 }
