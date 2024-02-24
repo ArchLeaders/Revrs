@@ -44,7 +44,7 @@ public static class ReaderExtensions
     /// </summary>
     /// <typeparam name="T">The primitive or struct type to read.</typeparam>
     /// <param name="slice">The data to read from.</param>
-    /// <returns>A reference to <typeparamref name="T"/> over a span of data.</returns>
+    /// <returns>A copy of <typeparamref name="T"/> read from the provided <paramref name="slice"/>.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static T Read<T>(this ReadOnlySpan<byte> slice) where T : unmanaged
     {
