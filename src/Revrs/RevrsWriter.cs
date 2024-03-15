@@ -1,7 +1,7 @@
 ﻿using Revrs.Extensions;
 using System.Buffers.Binary;
-using System.Runtime.InteropServices.Marshalling;
 using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.Marshalling;
 using System.Text;
 
 namespace Revrs;
@@ -9,7 +9,7 @@ namespace Revrs;
 /// <summary>
 /// Writes <see langword="primitive"/> and <see langword="struct"/> data types into a <see cref="Stream"/>, reversing the written values when required.
 /// </summary>
-public class RevrsWriter
+public readonly struct RevrsWriter
 {
     private readonly Stream _stream;
 
@@ -21,7 +21,7 @@ public class RevrsWriter
     /// <summary>
     /// The current position of the stream.
     /// </summary>
-    public long Position {
+    public readonly long Position {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         get => _stream.Position;
     }
