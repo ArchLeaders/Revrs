@@ -19,6 +19,14 @@ public readonly struct RevrsWriter
     public readonly Endianness Endianness;
 
     /// <summary>
+    /// The underlying <see cref="System.IO.Stream"/>.
+    /// </summary>
+    public readonly Stream Stream {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        get => _stream;
+    }
+
+    /// <summary>
     /// The current position of the stream.
     /// </summary>
     public readonly long Position {
@@ -64,6 +72,15 @@ public readonly struct RevrsWriter
     public void Move(long size)
     {
         _stream.Seek(size, SeekOrigin.Current);
+    }
+
+    /// <summary>
+    /// Flush the underlying <see cref="Stream"/>.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public void Flush()
+    {
+        _stream.Flush();
     }
 
     /// <summary>
