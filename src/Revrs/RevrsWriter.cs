@@ -94,6 +94,20 @@ public readonly struct RevrsWriter
     }
 
     /// <summary>
+    /// Aligns the position <b>up (+)</b> to the provided <paramref name="size"/> and ensures the padding is written.
+    /// </summary>
+    /// <param name="size"></param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public void AlignAtEnd(long size)
+    {
+        long alignValue = _stream.Position.AlignUp(size);
+        if (alignValue == 0) return;
+        
+        _stream.Seek(alignValue - 1, SeekOrigin.Current);
+        _stream.WriteByte(0);
+    }
+
+    /// <summary>
     /// Align the position <b>down (-)</b> to the provided <paramref name="size"/>.
     /// </summary>
     /// <param name="size"></param>
@@ -101,6 +115,20 @@ public readonly struct RevrsWriter
     public void AlignDown(long size)
     {
         _stream.Seek(_stream.Position.AlignDown(size), SeekOrigin.Current);
+    }
+
+    /// <summary>
+    /// Aligns the position <b>down (-)</b> to the provided <paramref name="size"/> and ensures the padding is written.
+    /// </summary>
+    /// <param name="size"></param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public void AlignDownAtEnd(long size)
+    {
+        long alignValue = _stream.Position.AlignDown(size);
+        if (alignValue == 0) return;
+        
+        _stream.Seek(alignValue - 1, SeekOrigin.Current);
+        _stream.WriteByte(0);
     }
 
     /// <summary>
