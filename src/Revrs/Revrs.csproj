@@ -17,10 +17,17 @@
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
+    <None Include="..\Revrs.SourceGenerator\bin\$(Configuration)\netstandard2.0\Revrs.SourceGenerator.dll"
+          Pack="true" Visible="false" PackagePath="analyzers\dotnet\cs" />
   </ItemGroup>
 
   <ItemGroup>
     <Using Include="System.Runtime.CompilerServices" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Revrs.SourceGenerator\Revrs.SourceGenerator.csproj"
+                      ReferenceOutputAssembly="false" />
   </ItemGroup>
 
 </Project>
