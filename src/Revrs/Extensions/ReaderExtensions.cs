@@ -122,16 +122,13 @@ public static class ReaderExtensions
         return result;
     }
 
-#if NET9_0_OR_GREATER
     /// <summary>
     /// Read <typeparamref name="T"/> from the provided <paramref name="stream"/> in the provided <paramref name="endianness"/>.
     /// <para>
-    /// <typeparamref name="R"/>, implementing <see cref="IStructReverser.Reverse(in Span{byte})"/>,
     /// will be used to reverse the buffer slice when endian swapping is required.
     /// </para>
     /// </summary>
     /// <typeparam name="T">The struct to read</typeparam>
-    /// <typeparam name="R">The <see cref="IStructReverser"/> to reverse <typeparamref name="T"/></typeparam>
     /// <param name="stream">The stream to read from.</param>
     /// <param name="endianness">The <see langword="byte-order"/> to use when reading the <paramref name="stream"/>.</param>
     /// <returns>A new instance of <typeparamref name="T"/> parsed from the <paramref name="stream"/>.</returns>
@@ -150,7 +147,6 @@ public static class ReaderExtensions
 
         return result;
     }
-#endif
 
     /// <summary>
     /// Read <typeparamref name="T"/> from the provided <paramref name="slice"/> in the provided <paramref name="endianness"/>.
@@ -174,16 +170,13 @@ public static class ReaderExtensions
         return ref MemoryMarshal.Cast<byte, T>(slice)[0];
     }
 
-#if NET9_0_OR_GREATER
     /// <summary>
     /// Read <typeparamref name="T"/> from the provided <paramref name="slice"/> in the provided <paramref name="endianness"/>.
     /// <para>
-    /// <typeparamref name="R"/>, implementing <see cref="IStructReverser.Reverse(in Span{byte})"/>,
     /// will be used to reverse the buffer slice when endian swapping is required.
     /// </para>
     /// </summary>
     /// <typeparam name="T">The struct to read</typeparam>
-    /// <typeparam name="R">The <see cref="IStructReverser"/> to reverse <typeparamref name="T"/></typeparam>
     /// <param name="slice">The data to read from.</param>
     /// <param name="endianness">The <see langword="byte-order"/> to use when reading the <paramref name="slice"/>.</param>
     /// <returns>A reference to <typeparamref name="T"/> over a span of data.</returns>
@@ -196,7 +189,6 @@ public static class ReaderExtensions
 
         return ref MemoryMarshal.Cast<byte, T>(slice)[0];
     }
-#endif
 
     /// <summary>
     /// Read <typeparamref name="T"/>'s from the provided <paramref name="slice"/> in the system <see cref="Endianness"/> until the end of the <paramref name="slice"/>.
@@ -286,16 +278,13 @@ public static class ReaderExtensions
         return MemoryMarshal.Cast<byte, T>(slice);
     }
 
-#if NET9_0_OR_GREATER
     /// <summary>
     /// Read <paramref name="count"/> <typeparamref name="T"/>'s from the provided <paramref name="slice"/> in the provided <paramref name="endianness"/>.
     /// <para>
-    /// <typeparamref name="R"/>, implementing <see cref="IStructReverser.Reverse(in Span{byte})"/>,
     /// will be used to reverse the buffer slice when endian swapping is required.
     /// </para>
     /// </summary>
     /// <typeparam name="T">The struct to read</typeparam>
-    /// <typeparam name="R">The <see cref="IStructReverser"/> to reverse <typeparamref name="T"/></typeparam>
     /// <param name="slice">The data to read from.</param>
     /// <param name="count">The number of <typeparamref name="T"/> to read.</param>
     /// <param name="endianness">The <see langword="byte-order"/> to use when reading the <paramref name="slice"/>.</param>
@@ -312,5 +301,4 @@ public static class ReaderExtensions
 
         return MemoryMarshal.Cast<byte, T>(slice);
     }
-#endif
 }

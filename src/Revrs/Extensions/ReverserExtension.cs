@@ -69,16 +69,13 @@ public static class ReverserExtension
         }
     }
 
-#if NET9_0_OR_GREATER
     /// <summary>
     /// Reverse <paramref name="count"/> <typeparamref name="T"/>'s from the provided <paramref name="slice"/>.
     /// <para>
-    /// <typeparamref name="R"/>, implementing <see cref="IStructReverser.Reverse(in Span{byte})"/>,
     /// will be used to reverse the buffer.
     /// </para>
     /// </summary>
     /// <typeparam name="T">The struct to reverse</typeparam>
-    /// <typeparam name="R">The <see cref="IStructReverser"/> to reverse <typeparamref name="T"/></typeparam>
     /// <param name="slice">The data to reverse.</param>
     /// <param name="count">The number of <typeparamref name="T"/> to reverse.</param>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -91,7 +88,6 @@ public static class ReverserExtension
             }
         }
     }
-#endif
 
     /// <summary>
     /// Reverse <paramref name="count"/> <typeparamref name="T"/>'s from the provided <paramref name="slice"/>.
@@ -115,16 +111,13 @@ public static class ReverserExtension
         }
     }
 
-#if NET9_0_OR_GREATER
     /// <summary>
     /// Reverse <paramref name="count"/> <typeparamref name="T"/>'s from the provided <paramref name="slice"/>.
     /// <para>
-    /// <typeparamref name="R"/>, implementing <see cref="IStructReverser.Reverse(in Span{byte})"/>,
     /// will be used to reverse the buffer.
     /// </para>
     /// </summary>
     /// <typeparam name="T">The struct to reverse</typeparam>
-    /// <typeparam name="R">The <see cref="IStructReverser"/> to reverse <typeparamref name="T"/></typeparam>
     /// <param name="slice">The data to reverse.</param>
     /// <param name="count">The number of <typeparamref name="T"/> to reverse.</param>
     /// <param name="size">The size of the blocks to reverse.</param>
@@ -137,5 +130,4 @@ public static class ReverserExtension
             }
         }
     }
-#endif
 }

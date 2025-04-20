@@ -82,11 +82,9 @@ public static class WriterExtensions
         stream.Write(buffer);
     }
     
-#if NET9_0_OR_GREATER
     /// <summary>
     /// Write the provided <paramref name="value"/> into the <paramref name="stream"/> in the provided <paramref name="endianness"/>.
     /// <para>
-    /// <typeparamref name="R"/>, implementing <see cref="IStructReverser.Reverse(in Span{byte})"/>,
     /// will be used to reverse the written value when endian swapping is required.
     /// </para>
     /// <para>
@@ -94,7 +92,6 @@ public static class WriterExtensions
     /// </para>
     /// </summary>
     /// <typeparam name="T">The type to write.</typeparam>
-    /// <typeparam name="R">The <see cref="IStructReverser"/> to reverse <typeparamref name="T"/></typeparam>
     /// <param name="stream">The stream to write the <paramref name="value"/> to.</param>
     /// <param name="value">The <see langword="unmanaged"/> <see langword="primitive"/> value to write.</param>
     /// <param name="endianness">The <see langword="byte-order"/> to use when writing the <paramref name="value"/>.</param>
@@ -112,5 +109,4 @@ public static class WriterExtensions
 
         stream.Write(buffer);
     }
-#endif
 }
