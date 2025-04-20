@@ -9,9 +9,6 @@ public static class ReaderExtensions
 {
     /// <summary>
     /// Read <typeparamref name="T"/> from the provided <paramref name="stream"/> in the system endianness.
-    /// <para>
-    /// <b>Note:</b> Reading types larger than 500 KB will allocate a buffer on the heap.
-    /// </para>
     /// </summary>
     /// <typeparam name="T">The primitive or struct type to read.</typeparam>
     /// <param name="stream">The stream to read from.</param>
@@ -54,9 +51,6 @@ public static class ReaderExtensions
     /// <para>
     /// <b>Warning: </b> Only read <a href="https://learn.microsoft.com/en-us/dotnet/api/system.type.isprimitive">primitive types</a>
     /// with this method, the entire buffer slice is reversed when endian swapping is required.
-    /// </para>
-    /// <para>
-    /// <b>Note:</b> Reading types larger than 500 KB will allocate a buffer on the heap.
     /// </para>
     /// </summary>
     /// <typeparam name="T">The primitive type to read.</typeparam>
@@ -106,9 +100,6 @@ public static class ReaderExtensions
     /// <typeparamref name="R"/>, implementing <see cref="IStructReverser.Reverse(in Span{byte})"/>,
     /// will be used to reverse the buffer slice when endian swapping is required.
     /// </para>
-    /// <para>
-    /// <b>Note:</b> Reading types larger than 500 KB will allocate a buffer on the heap.
-    /// </para>
     /// </summary>
     /// <typeparam name="T">The struct to read</typeparam>
     /// <typeparam name="R">The <see cref="IStructReverser"/> to reverse <typeparamref name="T"/></typeparam>
@@ -137,9 +128,6 @@ public static class ReaderExtensions
     /// <para>
     /// <typeparamref name="R"/>, implementing <see cref="IStructReverser.Reverse(in Span{byte})"/>,
     /// will be used to reverse the buffer slice when endian swapping is required.
-    /// </para>
-    /// <para>
-    /// <b>Note:</b> Reading types larger than 500 KB will allocate a buffer on the heap.
     /// </para>
     /// </summary>
     /// <typeparam name="T">The struct to read</typeparam>
