@@ -1,5 +1,6 @@
 using System.Collections.Immutable;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Text;
 using Microsoft.CodeAnalysis;
 
@@ -69,7 +70,7 @@ public class ReverserBuilder(SourceProductionContext context, Compilation compil
 
     private void GenerateRevrsForField(StringBuilder sb, IFieldSymbol field, int packSize, ref int pos)
     {
-        Span<int> fieldSizes = GetFieldSizes(field);
+        Span<RevrsSlice> fieldSizes = GetFieldSizes(field, packSize);
         int totalFieldSize = Sum(fieldSizes);
 
         ImmutableArray<AttributeData> fieldAttributes = field.GetAttributes();
@@ -82,7 +83,7 @@ public class ReverserBuilder(SourceProductionContext context, Compilation compil
 
         if (fieldAttributes.Any(x => SymbolEqualityComparer.Default.Equals(x.AttributeClass, _doNotReverseAttribute))) {
             pos += totalFieldSize;
-            goto End;
+            return;
         }
 
         ITypeSymbol fieldType = field.Type;
@@ -97,18 +98,16 @@ public class ReverserBuilder(SourceProductionContext context, Compilation compil
                 
                         {field.Type.ToDisplayString(NullableFlowState.NotNull, SymbolDisplayFormat.FullyQualifiedFormat)}.Reverse(slice[{pos}..{pos += totalFieldSize}]);
                 """);
-            goto End;
+            return;
         }
 
-        foreach (int fieldSize in fieldSizes) {
+        foreach ((int fieldSize, int pack) in fieldSizes) {
+            pos += AlignUp(pos, pack);
             sb.Append($"""
                 
                         slice[{pos}..{pos += fieldSize}].Reverse();
                 """);
         }
-
-    End:
-        pos += AlignUp(pos, packSize);
     }
 
     private int GetPackSize(INamedTypeSymbol symbol)
@@ -125,10 +124,10 @@ public class ReverserBuilder(SourceProductionContext context, Compilation compil
         return packSize;
     }
 
-    private int[] GetFieldSizes(IFieldSymbol field)
+    private RevrsSlice[] GetFieldSizes(IFieldSymbol field, int packSize)
     {
         if (field.Type is IPointerTypeSymbol ptr) {
-            int[] ptrTargetTypeSizes = GetTypeSizes((INamedTypeSymbol)ptr.PointedAtType);
+            RevrsSlice[] ptrTargetTypeSizes = GetTypeSizes((INamedTypeSymbol)ptr.PointedAtType, packSize);
             return Enumerable.Range(0, field.FixedSize)
                 .SelectMany(_ => ptrTargetTypeSizes)
                 .ToArray();
@@ -150,29 +149,28 @@ public class ReverserBuilder(SourceProductionContext context, Compilation compil
             return [];
         }
         
-        return GetTypeSizes(symbol);
+        return GetTypeSizes(symbol, packSize);
     }
     
-    private int[] GetTypeSizes(INamedTypeSymbol symbol)
+    private RevrsSlice[] GetTypeSizes(INamedTypeSymbol symbol, int parentPackSize)
     {
         if (symbol.TypeKind is TypeKind.Enum && symbol.EnumUnderlyingType is INamedTypeSymbol enumUnderlyingType) {
             return [
-                GetSpecialTypeSize(enumUnderlyingType.SpecialType)
+                (GetSpecialTypeSize(enumUnderlyingType.SpecialType), parentPackSize)
             ];
         }
 
         if (GetSpecialTypeSize(symbol.SpecialType) is var size && size != -1) {
-            return [size];
+            return [(size, parentPackSize)];
         }
-        
-        // TODO: Handle fixed pointers
 
+        int packSize = GetPackSize(symbol);
         IEnumerable<IFieldSymbol> fields = symbol
             .GetMembers()
             .Select(member => (member as IFieldSymbol)!)
             .Where(member => member is not null);
         
-        return fields.SelectMany(GetFieldSizes).ToArray();
+        return fields.SelectMany(x => GetFieldSizes(x, packSize)).ToArray();
     }
 
     private int GetSpecialTypeSize(SpecialType specialType)
@@ -198,10 +196,25 @@ public class ReverserBuilder(SourceProductionContext context, Compilation compil
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static int Sum(Span<int> numbers)
+    private static int Sum(Span<RevrsSlice> slices)
     {
-        int result = 0;
-        foreach (int number in numbers) result += number;
-        return result;
+        int totalSize = 0;
+        foreach ((int size, _) in slices) totalSize += size;
+        return totalSize;
+    }
+
+    [StructLayout(LayoutKind.Sequential, Pack = 4)]
+    private readonly struct RevrsSlice(int size, int pack)
+    {
+        public readonly int Size = size;
+        public readonly int Pack = pack;
+        
+        public static implicit operator RevrsSlice((int, int) tuple) => new RevrsSlice(tuple.Item1, tuple.Item2);
+
+        public void Deconstruct(out int size, out int pack)
+        {
+            size = Size;
+            pack = Pack;
+        }
     }
 }
