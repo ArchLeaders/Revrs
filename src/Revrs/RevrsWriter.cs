@@ -150,9 +150,9 @@ public readonly struct RevrsWriter
     /// <typeparam name="T">The type to write.</typeparam>
     /// <param name="value">The <see langword="unmanaged"/> <see langword="primitive"/> value to write.</param>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public unsafe void Write<T>(T value) where T : unmanaged
+    public void Write<T>(T value) where T : unmanaged
     {
-        WriterExtensions.Write(_stream, value, Endianness);
+        _stream.Write(value, Endianness);
     }
 
     /// <summary>
@@ -169,9 +169,9 @@ public readonly struct RevrsWriter
     /// <typeparam name="R">The <see cref="IStructReverser"/> to reverse <typeparamref name="T"/></typeparam>
     /// <param name="value">The <see langword="unmanaged"/> <see langword="primitive"/> value to write.</param>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public unsafe void Write<T, R>(T value) where T : unmanaged where R : IStructReverser
+    public void Write<T, R>(T value) where T : unmanaged where R : IStructReverser
     {
-        WriterExtensions.Write<T, R>(_stream, value, Endianness);
+        _stream.Write<T, R>(value, Endianness);
     }
 
     /// <summary>

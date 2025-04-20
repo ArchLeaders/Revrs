@@ -41,7 +41,7 @@ public ref struct RevrsReader(Span<byte> data, Endianness endianness = Endiannes
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static RevrsReader Native(Span<byte> buffer)
     {
-        return new(buffer, BitConverter.IsLittleEndian ? Endianness.Little : Endianness.Big);
+        return new RevrsReader(buffer, BitConverter.IsLittleEndian ? Endianness.Little : Endianness.Big);
     }
 
     /// <summary>
@@ -120,7 +120,7 @@ public ref struct RevrsReader(Span<byte> data, Endianness endianness = Endiannes
     public unsafe ref T Read<T>() where T : unmanaged
     {
         Span<byte> slice = Data[Position..(Position += sizeof(T))];
-        return ref ReaderExtensions.Read<T>(slice, Endianness);
+        return ref slice.Read<T>(Endianness);
     }
 
     /// <summary>
@@ -151,7 +151,7 @@ public ref struct RevrsReader(Span<byte> data, Endianness endianness = Endiannes
     public unsafe ref T Read<T>(int offset) where T : unmanaged
     {
         Span<byte> slice = Data[offset..(Position = offset + sizeof(T))];
-        return ref ReaderExtensions.Read<T>(slice, Endianness);
+        return ref slice.Read<T>(Endianness);
     }
 
     /// <summary>
@@ -172,7 +172,7 @@ public ref struct RevrsReader(Span<byte> data, Endianness endianness = Endiannes
     /// <summary>
     /// Read <typeparamref name="T"/> from the readers current position and advance forward by <see langword="sizeof"/>(<typeparamref name="T"/>).
     /// <para>
-    /// <typeparamref name="R"/>, implementing <see cref="IStructReverser.Reverse(in Span{byte})"/>,
+    /// <typeparamref name="R"/>, implementing <see name="IReversablerseable.Reverse(in Span{byte})"/>,
     /// will be used to reverse the buffer slice when endian swapping is required.
     /// </para>
     /// </summary>
@@ -183,13 +183,13 @@ public ref struct RevrsReader(Span<byte> data, Endianness endianness = Endiannes
     public unsafe ref T Read<T, R>() where T : unmanaged where R : IStructReverser
     {
         Span<byte> slice = Data[Position..(Position += sizeof(T))];
-        return ref ReaderExtensions.Read<T, R>(slice, Endianness);
+        return ref slice.Read<T, R>(Endianness);
     }
 
     /// <summary>
     /// Reverse <typeparamref name="T"/> from the readers current position and advance forward by <see langword="sizeof"/>(<typeparamref name="T"/>).
     /// <para>
-    /// <typeparamref name="R"/>, implementing <see cref="IStructReverser.Reverse(in Span{byte})"/>,
+    /// <typeparamref name="R"/>, implementing <see name="IReversablerseable.Reverse(in Span{byte})"/>,
     /// will be used to reverse the buffer slice.
     /// </para>
     /// </summary>
@@ -204,7 +204,7 @@ public ref struct RevrsReader(Span<byte> data, Endianness endianness = Endiannes
     /// <summary>
     /// Read <typeparamref name="T"/> from the provided <paramref name="offset"/> and advance forward by <see langword="sizeof"/>(<typeparamref name="T"/>).
     /// <para>
-    /// <typeparamref name="R"/>, implementing <see cref="IStructReverser.Reverse(in Span{byte})"/>,
+    /// <typeparamref name="R"/>, implementing <see name="IReversablerseable.Reverse(in Span{byte})"/>,
     /// will be used to reverse the buffer slice when endian swapping is required.
     /// </para>
     /// </summary>
@@ -216,13 +216,13 @@ public ref struct RevrsReader(Span<byte> data, Endianness endianness = Endiannes
     public unsafe ref T Read<T, R>(int offset) where T : unmanaged where R : IStructReverser
     {
         Span<byte> slice = Data[offset..(Position = offset + sizeof(T))];
-        return ref ReaderExtensions.Read<T, R>(slice, Endianness);
+        return ref slice.Read<T, R>(Endianness);
     }
 
     /// <summary>
     /// Reverse <typeparamref name="T"/> from the provided <paramref name="offset"/> and advance forward by <see langword="sizeof"/>(<typeparamref name="T"/>).
     /// <para>
-    /// <typeparamref name="R"/>, implementing <see cref="IStructReverser.Reverse(in Span{byte})"/>,
+    /// <typeparamref name="R"/>, implementing <see name="IReversablerseable.Reverse(in Span{byte})"/>,
     /// will be used to reverse the buffer slice.
     /// </para>
     /// </summary>
@@ -266,7 +266,7 @@ public ref struct RevrsReader(Span<byte> data, Endianness endianness = Endiannes
     public unsafe void ReverseSpan<T>(int count) where T : unmanaged
     {
         int size = sizeof(T);
-        ReverserExtension.ReverseSpan<T>(Data[Position..(Position += count * size)], count, size);
+        Data[Position..(Position += count * size)].ReverseSpan<T>(count, size);
     }
 
     /// <summary>
@@ -302,13 +302,13 @@ public ref struct RevrsReader(Span<byte> data, Endianness endianness = Endiannes
     public unsafe void ReverseSpan<T>(int count, int offset) where T : unmanaged
     {
         int size = sizeof(T);
-        ReverserExtension.ReverseSpan<T>(Data[offset..(Position = offset + count * size)], count, size);
+        Data[offset..(Position = offset + count * size)].ReverseSpan<T>(count, size);
     }
 
     /// <summary>
     /// Read <paramref name="count"/> <typeparamref name="T"/>'s from the readers current position and advance forward by <see langword="sizeof"/>(<typeparamref name="T"/>) * <paramref name="count"/>.
     /// <para>
-    /// <typeparamref name="R"/>, implementing <see cref="IStructReverser.Reverse(in Span{byte})"/>,
+    /// <typeparamref name="R"/>, implementing <see name="IReversablerseable.Reverse(in Span{byte})"/>,
     /// will be used to reverse the buffer slice when endian swapping is required.
     /// </para>
     /// </summary>
@@ -327,7 +327,7 @@ public ref struct RevrsReader(Span<byte> data, Endianness endianness = Endiannes
     /// <summary>
     /// Reverse <paramref name="count"/> <typeparamref name="T"/>'s from the readers current position and advance forward by <see langword="sizeof"/>(<typeparamref name="T"/>) * <paramref name="count"/>.
     /// <para>
-    /// <typeparamref name="R"/>, implementing <see cref="IStructReverser.Reverse(in Span{byte})"/>,
+    /// <typeparamref name="R"/>, implementing <see name="IReversablerseable.Reverse(in Span{byte})"/>,
     /// will be used to reverse the buffer slice.
     /// </para>
     /// </summary>
@@ -338,13 +338,13 @@ public ref struct RevrsReader(Span<byte> data, Endianness endianness = Endiannes
     public unsafe void ReverseSpan<T, R>(int count) where T : unmanaged where R : IStructReverser
     {
         int size = sizeof(T);
-        ReverserExtension.ReverseSpan<T, R>(Data[Position..(Position += count * size)], count, size);
+        Data[Position..(Position += count * size)].ReverseSpan<T, R>(count, size);
     }
 
     /// <summary>
     /// Read <paramref name="count"/> <typeparamref name="T"/>'s from the provided <paramref name="offset"/> and advance forward by <see langword="sizeof"/>(<typeparamref name="T"/>) * <paramref name="count"/>.
     /// <para>
-    /// <typeparamref name="R"/>, implementing <see cref="IStructReverser.Reverse(in Span{byte})"/>,
+    /// <typeparamref name="R"/>, implementing <see name="IReversablerseable.Reverse(in Span{byte})"/>,
     /// will be used to reverse the buffer slice when endian swapping is required.
     /// </para>
     /// </summary>
@@ -364,7 +364,7 @@ public ref struct RevrsReader(Span<byte> data, Endianness endianness = Endiannes
     /// <summary>
     /// Reverse <paramref name="count"/> <typeparamref name="T"/>'s from the provided <paramref name="offset"/> and advance forward by <see langword="sizeof"/>(<typeparamref name="T"/>) * <paramref name="count"/>.
     /// <para>
-    /// <typeparamref name="R"/>, implementing <see cref="IStructReverser.Reverse(in Span{byte})"/>,
+    /// <typeparamref name="R"/>, implementing <see name="IReversablerseable.Reverse(in Span{byte})"/>,
     /// will be used to reverse the buffer slice.
     /// </para>
     /// </summary>
@@ -376,11 +376,11 @@ public ref struct RevrsReader(Span<byte> data, Endianness endianness = Endiannes
     public unsafe void ReverseSpan<T, R>(int count, int offset) where T : unmanaged where R : IStructReverser
     {
         int size = sizeof(T);
-        ReverserExtension.ReverseSpan<T, R>(Data[offset..(Position = offset + count * size)], count, size);
+        Data[offset..(Position = offset + count * size)].ReverseSpan<T, R>(count, size);
     }
 
     /// <summary>
-    /// Local function prefered over <see cref="ReaderExtensions.ReadSpan{T}(Span{byte}, int, Endianness)"/> for performance.
+    /// Local function prefered over <see cref="ReaderExtensions.ReadSpan{T}(Span{byte},int,Revrs.Endianness)"/> for performance.
     /// </summary>
     /// <returns></returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -396,7 +396,7 @@ public ref struct RevrsReader(Span<byte> data, Endianness endianness = Endiannes
     }
 
     /// <summary>
-    /// Local function prefered over <see cref="ReaderExtensions.ReadSpan{T, R}(Span{byte}, int, Endianness)"/> for performance.
+    /// Local function preferred over <see cref="ReaderExtensions.ReadSpan{T, R}(Span{byte},int,Revrs.Endianness)"/> for performance.
     /// </summary>
     /// <returns></returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
