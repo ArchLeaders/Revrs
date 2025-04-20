@@ -50,21 +50,21 @@ public static class ReverserExtension
     /// <summary>
     /// Reverse <paramref name="count"/> <typeparamref name="T"/>'s from the provided <paramref name="slice"/>.
     /// <para>
-    /// <typeparamref name="R"/>, implementing <see cref="IStructReverser.Reverse(in Span{byte})"/>,
+    /// <typeparamref name="TReverser"/>, implementing <see cref="IStructReverser.Reverse(in Span{byte})"/>,
     /// will be used to reverse the buffer.
     /// </para>
     /// </summary>
     /// <typeparam name="T">The struct to reverse</typeparam>
-    /// <typeparam name="R">The <see cref="IStructReverser"/> to reverse <typeparamref name="T"/></typeparam>
+    /// <typeparam name="TReverser">The <see cref="IStructReverser"/> to reverse <typeparamref name="T"/></typeparam>
     /// <param name="slice">The data to reverse.</param>
     /// <param name="count">The number of <typeparamref name="T"/> to reverse.</param>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static unsafe void ReverseSpan<T, R>(this Span<byte> slice, int count) where T : unmanaged where R : IStructReverser
+    public static unsafe void ReverseSpan<T, TReverser>(this Span<byte> slice, int count) where T : unmanaged where TReverser : IStructReverser
     {
         int size = sizeof(T);
         if (size > 1) {
             for (int i = 0; i < count;) {
-                R.Reverse(slice[(size * i)..(size * (++i))]);
+                TReverser.Reverse(slice[(size * i)..(size * (++i))]);
             }
         }
     }
@@ -92,21 +92,21 @@ public static class ReverserExtension
     /// <summary>
     /// Reverse <paramref name="count"/> <typeparamref name="T"/>'s from the provided <paramref name="slice"/>.
     /// <para>
-    /// <typeparamref name="R"/>, implementing <see cref="IStructReverser.Reverse(in Span{byte})"/>,
+    /// <typeparamref name="TReverser"/>, implementing <see cref="IStructReverser.Reverse(in Span{byte})"/>,
     /// will be used to reverse the buffer.
     /// </para>
     /// </summary>
     /// <typeparam name="T">The struct to reverse</typeparam>
-    /// <typeparam name="R">The <see cref="IStructReverser"/> to reverse <typeparamref name="T"/></typeparam>
+    /// <typeparam name="TReverser">The <see cref="IStructReverser"/> to reverse <typeparamref name="T"/></typeparam>
     /// <param name="slice">The data to reverse.</param>
     /// <param name="count">The number of <typeparamref name="T"/> to reverse.</param>
     /// <param name="size">The size of the blocks to reverse.</param>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void ReverseSpan<T, R>(this Span<byte> slice, int count, int size) where T : unmanaged where R : IStructReverser
+    public static void ReverseSpan<T, TReverser>(this Span<byte> slice, int count, int size) where T : unmanaged where TReverser : IStructReverser
     {
         if (size > 1) {
             for (int i = 0; i < count;) {
-                R.Reverse(slice[(size * i)..(size * (++i))]);
+                TReverser.Reverse(slice[(size * i)..(size * (++i))]);
             }
         }
     }

@@ -97,17 +97,17 @@ public static class ReaderExtensions
     /// <summary>
     /// Read <typeparamref name="T"/> from the provided <paramref name="stream"/> in the provided <paramref name="endianness"/>.
     /// <para>
-    /// <typeparamref name="R"/>, implementing <see cref="IStructReverser.Reverse(in Span{byte})"/>,
+    /// <typeparamref name="TReverser"/>, implementing <see cref="IStructReverser.Reverse(in Span{byte})"/>,
     /// will be used to reverse the buffer slice when endian swapping is required.
     /// </para>
     /// </summary>
     /// <typeparam name="T">The struct to read</typeparam>
-    /// <typeparam name="R">The <see cref="IStructReverser"/> to reverse <typeparamref name="T"/></typeparam>
+    /// <typeparam name="TReverser">The <see cref="IStructReverser"/> to reverse <typeparamref name="T"/></typeparam>
     /// <param name="stream">The stream to read from.</param>
     /// <param name="endianness">The <see langword="byte-order"/> to use when reading the <paramref name="stream"/>.</param>
     /// <returns>A new instance of <typeparamref name="T"/> parsed from the <paramref name="stream"/>.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static unsafe T Read<T, R>(this Stream stream, Endianness endianness) where T : unmanaged where R : IStructReverser
+    public static unsafe T Read<T, TReverser>(this Stream stream, Endianness endianness) where T : unmanaged where TReverser : IStructReverser
     {
         int size = sizeof(T);
         T result = default;
@@ -116,7 +116,7 @@ public static class ReaderExtensions
         stream.ReadExactly(buffer);
         
         if (size > 1 && endianness.IsNotSystemEndianness()) {
-            R.Reverse(buffer);
+            TReverser.Reverse(buffer);
         }
 
         return result;
@@ -151,20 +151,20 @@ public static class ReaderExtensions
     /// <summary>
     /// Read <typeparamref name="T"/> from the provided <paramref name="slice"/> in the provided <paramref name="endianness"/>.
     /// <para>
-    /// <typeparamref name="R"/>, implementing <see cref="IStructReverser.Reverse(in Span{byte})"/>,
+    /// <typeparamref name="TReverser"/>, implementing <see cref="IStructReverser.Reverse(in Span{byte})"/>,
     /// will be used to reverse the buffer slice when endian swapping is required.
     /// </para>
     /// </summary>
     /// <typeparam name="T">The struct to read</typeparam>
-    /// <typeparam name="R">The <see cref="IStructReverser"/> to reverse <typeparamref name="T"/></typeparam>
+    /// <typeparam name="TReverser">The <see cref="IStructReverser"/> to reverse <typeparamref name="T"/></typeparam>
     /// <param name="slice">The data to read from.</param>
     /// <param name="endianness">The <see langword="byte-order"/> to use when reading the <paramref name="slice"/>.</param>
     /// <returns>A reference to <typeparamref name="T"/> over a span of data.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static ref T Read<T, R>(this Span<byte> slice, Endianness endianness) where T : unmanaged where R : IStructReverser
+    public static ref T Read<T, TReverser>(this Span<byte> slice, Endianness endianness) where T : unmanaged where TReverser : IStructReverser
     {
         if (slice.Length > 1 && endianness.IsNotSystemEndianness()) {
-            R.Reverse(slice);
+            TReverser.Reverse(slice);
         }
 
         return ref MemoryMarshal.Cast<byte, T>(slice)[0];
@@ -255,23 +255,23 @@ public static class ReaderExtensions
     /// <summary>
     /// Read <paramref name="count"/> <typeparamref name="T"/>'s from the provided <paramref name="slice"/> in the provided <paramref name="endianness"/>.
     /// <para>
-    /// <typeparamref name="R"/>, implementing <see cref="IStructReverser.Reverse(in Span{byte})"/>,
+    /// <typeparamref name="TReverser"/>, implementing <see cref="IStructReverser.Reverse(in Span{byte})"/>,
     /// will be used to reverse the buffer slice when endian swapping is required.
     /// </para>
     /// </summary>
     /// <typeparam name="T">The struct to read</typeparam>
-    /// <typeparam name="R">The <see cref="IStructReverser"/> to reverse <typeparamref name="T"/></typeparam>
+    /// <typeparam name="TReverser">The <see cref="IStructReverser"/> to reverse <typeparamref name="T"/></typeparam>
     /// <param name="slice">The data to read from.</param>
     /// <param name="count">The number of <typeparamref name="T"/> to read.</param>
     /// <param name="endianness">The <see langword="byte-order"/> to use when reading the <paramref name="slice"/>.</param>
     /// <returns>A <see cref="Span{T}"/> where the length of the <see cref="Span{T}"/> is <paramref name="count"/>.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static unsafe Span<T> ReadSpan<T, R>(this Span<byte> slice, int count, Endianness endianness) where T : unmanaged where R : IStructReverser
+    public static unsafe Span<T> ReadSpan<T, TReverser>(this Span<byte> slice, int count, Endianness endianness) where T : unmanaged where TReverser : IStructReverser
     {
         int size = sizeof(T);
         if (size > 1 && endianness.IsNotSystemEndianness()) {
             for (int i = 0; i < count;) {
-                R.Reverse(slice[(size * i)..(size * ++i)]);
+                TReverser.Reverse(slice[(size * i)..(size * ++i)]);
             }
         }
 
