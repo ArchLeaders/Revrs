@@ -4,6 +4,11 @@ using System.Runtime.InteropServices;
 namespace Revrs;
 
 /// <summary>
+/// A delegate used to determine the BoM of data using a BigEndian <paramref name="reader"/>.
+/// </summary>
+public delegate Endianness GetByteOrderMarkFunc(ref RevrsReader reader);
+
+/// <summary>
 /// Reads <see langword="unmanaged"/> <see langword="primitive"/> and <see langword="struct"/> data types over a <see cref="Span{T}"/> of bytes, reversing the underlying <see cref="Span{T}"/> when required.
 /// </summary>
 /// <param name="data">A <see cref="Span{T}"/> over the data buffer.</param>
@@ -18,6 +23,7 @@ public ref struct RevrsReader(Span<byte> data, Endianness endianness = Endiannes
     /// <summary>
     /// The target <see langword="byte-order"/> of the <see cref="RevrsReader"/>.
     /// </summary>
+    // ReSharper disable once FieldCanBeMadeReadOnly.Global
     public Endianness Endianness = endianness;
 
     /// <summary>
@@ -42,6 +48,25 @@ public ref struct RevrsReader(Span<byte> data, Endianness endianness = Endiannes
     public static RevrsReader Native(Span<byte> buffer)
     {
         return new RevrsReader(buffer, BitConverter.IsLittleEndian ? Endianness.Little : Endianness.Big);
+    }
+
+    /// <summary>
+    /// Create a new <see cref="RevrsReader"/> using a predefined function to determine the byte order
+    /// </summary>
+    /// <param name="buffer"></param>
+    /// <param name="getByteOrderMark">The function used to get the BoM</param>
+    /// <returns>A <see langword="new"/> <see cref="RevrsReader"/> instatiated over the provided <paramref name="buffer"/> using the system-native <see langword="byte-order"/>.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static RevrsReader Create(Span<byte> buffer, GetByteOrderMarkFunc getByteOrderMark)
+    {
+        RevrsReader reader = new(buffer);
+        Endianness bom = getByteOrderMark(ref reader);
+
+        return bom switch {
+            Endianness.Big => reader with { Position = 0 },
+            Endianness.Little => new RevrsReader(buffer, Endianness.Little),
+            _ => throw new InvalidDataException($"Invalid byte order mark: '{bom:x2}'")
+        };
     }
 
     /// <summary>
