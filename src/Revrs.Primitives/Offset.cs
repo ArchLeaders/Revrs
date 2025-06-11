@@ -18,7 +18,7 @@ public readonly unsafe struct Offset<T> : IStructReverser where T : unmanaged
     }
     
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public ref T Get<TParent>(ref TParent relativeOffset) where TParent : unmanaged
+    public ref T Get<TParent>(in TParent relativeOffset) where TParent : unmanaged
     {
         fixed (TParent* loc = &relativeOffset) {
             byte* ptr = (byte*)loc + _offset;
@@ -27,7 +27,7 @@ public readonly unsafe struct Offset<T> : IStructReverser where T : unmanaged
     }
     
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public Span<T> GetSpan<TParent>(ref TParent relativeOffset, int length) where TParent : unmanaged
+    public Span<T> GetSpan<TParent>(in TParent relativeOffset, int length) where TParent : unmanaged
     {
         fixed (TParent* loc = &relativeOffset) {
             byte* ptr = (byte*)loc + _offset;

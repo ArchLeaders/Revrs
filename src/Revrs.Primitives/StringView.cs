@@ -19,9 +19,9 @@ public ref struct StringView
         Value = value;   
     }
 
-    public StringView(ref byte value)
+    public StringView(in byte value)
     {
-        Value = new ReadOnlySpan<byte>(ref value);
+        Value = new ReadOnlySpan<byte>(in value);
     }
     
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -31,7 +31,7 @@ public ref struct StringView
     public static implicit operator StringView(ReadOnlySpan<byte> utf8) => new(utf8);
     
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static unsafe implicit operator StringView(byte* ptr) => new(ref Unsafe.AsRef<byte>(ptr));
+    public static unsafe implicit operator StringView(byte* ptr) => new(in Unsafe.AsRef<byte>(ptr));
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public override string ToString() => Encoding.UTF8.GetString(Value);
