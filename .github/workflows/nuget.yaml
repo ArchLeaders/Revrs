@@ -7,10 +7,7 @@ on:
 
 env:
   nuget: "https://api.nuget.org/v3/index.json"
-  project_name: Revrs
   authors: ArchLeaders
-  description: |-
-    A zero-allocation endian neutral binary IO utility.
   readme: ./Readme.md
   icon: ./icon.png
   repo: https://github.com/ArchLeaders/Revrs
@@ -21,6 +18,12 @@ jobs:
   deploy:
     name: Deploy to NuGet
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - name: Revrs
+          - name: Revrs.Primitives
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -33,12 +36,12 @@ jobs:
       - name: Restore
         shell: bash
         run: |-
-          dotnet restore src/${{ env.project_name }}/${{ env.project_name }}.csproj
+          dotnet restore src/${{ matrix.config.name }}/${{ matrix.config.name }}.csproj
 
       - name: Build
         shell: bash
         run: |-
-          dotnet build src/${{ env.project_name }}/${{ env.project_name }}.csproj \
+          dotnet build src/${{ matrix.config.name }}/${{ matrix.config.name }}.csproj \
           --no-restore                                                            \
           -c Release                                                              \
 
@@ -49,12 +52,11 @@ jobs:
       - name: Package
         shell: bash
         run: |
-          dotnet pack src/${{ env.project_name }}/${{ env.project_name }}.csproj \
+          dotnet pack src/${{ matrix.config.name }}/${{ matrix.config.name }}.csproj \
           --no-restore                                                           \
           -c Release                                                             \
           -o ./build-output/                                                     \
           -p:Authors="${{ env.authors }}"                                        \
-          -p:Description="${{ env.description }}"                                \
           -p:PackageLicenseExpression="${{ env.spdx }}"                          \
           -p:PackageProjectUrl="${{ env.repo }}"                                 \
           -p:PackageReadmeFile="${{ env.readme }}"                               \

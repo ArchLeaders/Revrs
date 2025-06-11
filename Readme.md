@@ -6,4 +6,4 @@
 
 ## Usage
 
-Currently there is no proper documentation, only an [API](https://archleaders.github.io/Revrs/api) reference and source code.
+Currently, there is no proper documentation, only an [API](https://archleaders.github.io/Revrs/api) reference and source code.

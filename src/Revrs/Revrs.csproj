@@ -6,14 +6,15 @@
     <Nullable>enable</Nullable>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <Description>A zero-allocation endian neutral binary IO utility.</Description>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\..\icon.png">
+    <None Include="..\..\icon.png" Visible="false">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
-    <None Include="..\..\Readme.md">
+    <None Include="..\..\Readme.md" Visible="false">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
