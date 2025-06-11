@@ -20,7 +20,7 @@ public unsafe class Resource<T>(byte[] buffer) where T : unmanaged, IValidatable
     public Result<T> Value {
         get {
             ref T result = ref MemoryMarshal.Cast<byte, T>(_memory.Span)[0];
-            return new Result<T>(ref result, T.Validate(result));
+            return new Result<T>(ref result, T.Validate(ref result));
         }
     }
 
@@ -31,7 +31,7 @@ public unsafe class Resource<T>(byte[] buffer) where T : unmanaged, IValidatable
     {
         try {
             ref T result = ref MemoryMarshal.Cast<byte, T>(_memory.Span)[0];
-            return new Result<T>(ref result, T.Validate(result));
+            return new Result<T>(ref result, T.Validate(ref result));
         }
         catch (Exception ex) {
             return Result<T>.Err(ex);

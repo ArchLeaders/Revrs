@@ -11,5 +11,5 @@ public interface IValidatableResource<T> where T : unmanaged
     /// </summary>
     /// <param name="resource"></param>
     /// <returns></returns>
-    public static abstract Exception? Validate(in T resource);
+    public static abstract Exception? Validate(ref T resource);
 }
