@@ -150,15 +150,15 @@ public readonly struct RevrsWriter
     /// <typeparam name="T">The type to write.</typeparam>
     /// <param name="value">The <see langword="unmanaged"/> <see langword="primitive"/> value to write.</param>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public unsafe void Write<T>(T value) where T : unmanaged
+    public void Write<T>(T value) where T : unmanaged
     {
-        WriterExtensions.Write(_stream, value, Endianness);
+        _stream.Write(value, Endianness);
     }
 
     /// <summary>
     /// Write the provided <paramref name="value"/> and advance the stream position by <see langword="sizeof"/>(<typeparamref name="T"/>).
     /// <para>
-    /// <typeparamref name="R"/>, implementing <see cref="IStructReverser.Reverse(in Span{byte})"/>,
+    /// <typeparamref name="TReverser"/>, implementing <see cref="IStructReverser.Reverse(in Span{byte})"/>,
     /// will be used to reverse the written value when endian swapping is required.
     /// </para>
     /// <para>
@@ -166,12 +166,29 @@ public readonly struct RevrsWriter
     /// </para>
     /// </summary>
     /// <typeparam name="T">The type to write.</typeparam>
-    /// <typeparam name="R">The <see cref="IStructReverser"/> to reverse <typeparamref name="T"/></typeparam>
+    /// <typeparam name="TReverser">The <see cref="IStructReverser"/> to reverse <typeparamref name="T"/></typeparam>
     /// <param name="value">The <see langword="unmanaged"/> <see langword="primitive"/> value to write.</param>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public unsafe void Write<T, R>(T value) where T : unmanaged where R : IStructReverser
+    public void Write<T, TReverser>(T value) where T : unmanaged where TReverser : IStructReverser
     {
-        WriterExtensions.Write<T, R>(_stream, value, Endianness);
+        _stream.Write<T, TReverser>(value, Endianness);
+    }
+
+    /// <summary>
+    /// Write the provided <paramref name="value"/> and advance the stream position by <see langword="sizeof"/>(<typeparamref name="T"/>).
+    /// <para>
+    /// will be used to reverse the written value when endian swapping is required.
+    /// </para>
+    /// <para>
+    /// <b>Note:</b> Writing types larger than 500 KB will allocate a buffer on the heap.
+    /// </para>
+    /// </summary>
+    /// <typeparam name="T">The type to write.</typeparam>
+    /// <param name="value">The <see langword="unmanaged"/> <see langword="primitive"/> value to write.</param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public void WriteStruct<T>(T value) where T : unmanaged, IStructReverser
+    {
+        _stream.WriteStruct(value, Endianness);
     }
 
     /// <summary>

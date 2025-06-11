@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFrameworks>net9.0;net8.0</TargetFrameworks>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -17,10 +17,17 @@
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
+    <None Include="..\Revrs.SourceGenerator\bin\$(Configuration)\netstandard2.0\Revrs.SourceGenerator.dll"
+          Pack="true" Visible="false" PackagePath="analyzers\dotnet\cs" />
   </ItemGroup>
 
   <ItemGroup>
     <Using Include="System.Runtime.CompilerServices" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Revrs.SourceGenerator\Revrs.SourceGenerator.csproj"
+                      ReferenceOutputAssembly="false" />
   </ItemGroup>
 
 </Project>
