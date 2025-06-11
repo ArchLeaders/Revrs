@@ -1,9 +1,9 @@
-namespace Revrs.Extensions;
+namespace Revrs;
 
 /// <summary>
 /// Extension methods for reading types directly from memory.
 /// </summary>
-public static unsafe class MemoryExtensions
+public static unsafe class MemUtils
 {
     /// <summary>
     /// Read <typeparamref name="T"/> from memory relative to a given <typeparamref name="TOwner"/> 
@@ -13,7 +13,7 @@ public static unsafe class MemoryExtensions
     /// <typeparam name="T">The type to read from memory</typeparam>
     /// <typeparam name="TOwner"></typeparam>
     /// <returns></returns>
-    public static ref T GetRelativeTo<T, TOwner>(this ref TOwner owner, int offset)
+    public static ref T GetRelativeTo<T, TOwner>(in TOwner owner, int offset)
         where T : unmanaged
 #if NET9_0_OR_GREATER
         , allows ref struct
@@ -50,7 +50,7 @@ public static unsafe class MemoryExtensions
     /// <param name="offset">The offset from the owner to look for <typeparamref name="T"/></param>
     /// <typeparam name="T">The type to read from memory</typeparam>
     /// <typeparam name="TOwner"></typeparam>
-    public static ref T GetRelativeTo<T, TOwner>(this ref TOwner owner, uint offset)
+    public static ref T GetRelativeTo<T, TOwner>(in TOwner owner, uint offset)
         where T : unmanaged
 #if NET9_0_OR_GREATER
         , allows ref struct
@@ -120,7 +120,7 @@ public static unsafe class MemoryExtensions
     /// <param name="count">The number of objects to read from memory</param>
     /// <typeparam name="T">The type to read from memory</typeparam>
     /// <typeparam name="TOwner"></typeparam>
-    public static Span<T> GetSpanRelativeTo<T, TOwner>(this ref TOwner owner, uint offset, int count)
+    public static Span<T> GetSpanRelativeTo<T, TOwner>(in TOwner owner, uint offset, int count)
         where T : unmanaged
         where TOwner : unmanaged
     {
