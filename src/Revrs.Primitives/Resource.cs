@@ -2,7 +2,7 @@ using System.Runtime.InteropServices;
 
 namespace Revrs.Primitives;
 
-public unsafe class Resource<T>(byte[] buffer) where T : unmanaged, IValidatableResource<T>
+public unsafe class Resource<T>(ArraySegment<byte> buffer) where T : unmanaged, IValidatableResource<T>
 {
     /// <summary>
     /// The constant size of the unmanaged type
