@@ -6,9 +6,9 @@ namespace Revrs.Primitives;
 /// <summary>
 /// A view over any region of bytes as a string
 /// </summary>
-public ref struct StringView
+public readonly ref struct StringView
 {
-    public ReadOnlySpan<byte> Value;
+    public readonly ReadOnlySpan<byte> Value;
 
     public StringView()
     {
