@@ -65,7 +65,7 @@ public ref struct RevrsReader(Span<byte> data, Endianness endianness = Endiannes
         return bom switch {
             Endianness.Big => reader with { Position = 0 },
             Endianness.Little => new RevrsReader(buffer, Endianness.Little),
-            _ => throw new InvalidDataException($"Invalid byte order mark: '{bom:x2}'")
+            _ => throw new InvalidDataException($"Invalid byte order mark: '{bom:x}'")
         };
     }
 
