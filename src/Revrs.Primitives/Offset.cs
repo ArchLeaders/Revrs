@@ -6,22 +6,26 @@ namespace Revrs.Primitives;
 [StructLayout(LayoutKind.Sequential, Pack = 4, Size = 4)]
 public readonly unsafe struct Offset<T> : IStructReverser where T : unmanaged
 {
-    private readonly uint _offset;
+    public readonly uint Value;
 
     public Offset()
     {
     }
     
-    public Offset(uint offset)
+    public Offset(uint value)
     {
-        _offset = offset;
+        Value = value;
     }
     
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public ref T Get<TParent>(in TParent relativeOffset) where TParent : unmanaged
     {
+        if (Value <= 0) {
+            return ref Unsafe.NullRef<T>();
+        }
+        
         fixed (TParent* loc = &relativeOffset) {
-            byte* ptr = (byte*)loc + _offset;
+            byte* ptr = (byte*)loc + Value;
             return ref *(T*)ptr;
         }
     }
@@ -29,9 +33,30 @@ public readonly unsafe struct Offset<T> : IStructReverser where T : unmanaged
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public Span<T> GetSpan<TParent>(in TParent relativeOffset, int length) where TParent : unmanaged
     {
+        if (Value <= 0) {
+            return [];
+        }
+        
         fixed (TParent* loc = &relativeOffset) {
-            byte* ptr = (byte*)loc + _offset;
+            byte* ptr = (byte*)loc + Value;
             return new Span<T>(ptr, length);
+        }
+    }
+    
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public Span<byte> GetStr<TParent>(in TParent relativeOffset) where TParent : unmanaged
+    {
+        if (Value <= 0) {
+            return [];
+        }
+        
+        fixed (TParent* loc = &relativeOffset) {
+            byte* ptr = (byte*)loc + Value;
+            
+            int length = -1;
+            while (ptr[++length] is not 0) { }
+            
+            return new Span<byte>(ptr, length);
         }
     }
 
