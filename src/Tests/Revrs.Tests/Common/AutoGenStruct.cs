@@ -3,7 +3,7 @@ using Revrs.Attributes;
 
 namespace Revrs.Tests.Common;
 
-[Reversable]
+[Reversible]
 [StructLayout(LayoutKind.Sequential, Pack = 4)]
 public partial struct AutoGenStruct
 {
@@ -23,7 +23,7 @@ public partial struct AutoGenStruct
     public unsafe fixed int Fixed[4];
 }
 
-[Reversable]
+[Reversible]
 [StructLayout(LayoutKind.Sequential, Pack = 2)]
 public partial struct NestedAutoGenStruct
 {

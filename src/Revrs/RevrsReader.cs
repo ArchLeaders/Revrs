@@ -197,7 +197,7 @@ public ref struct RevrsReader(Span<byte> data, Endianness endianness = Endiannes
     /// <summary>
     /// Read <typeparamref name="T"/> from the readers current position and advance forward by <see langword="sizeof"/>(<typeparamref name="T"/>).
     /// <para>
-    /// <typeparamref name="TReverser"/>, implementing <see name="IReversablerseable.Reverse(in Span{byte})"/>,
+    /// <typeparamref name="TReverser"/>, implementing <see name="IStructReverser.Reverse(in Span{byte})"/>,
     /// will be used to reverse the buffer slice when endian swapping is required.
     /// </para>
     /// </summary>
@@ -229,7 +229,7 @@ public ref struct RevrsReader(Span<byte> data, Endianness endianness = Endiannes
     /// <summary>
     /// Reverse <typeparamref name="T"/> from the readers current position and advance forward by <see langword="sizeof"/>(<typeparamref name="T"/>).
     /// <para>
-    /// <typeparamref name="TReverser"/>, implementing <see name="IReversablerseable.Reverse(in Span{byte})"/>,
+    /// <typeparamref name="TReverser"/>, implementing <see name="IStructReverser.Reverse(in Span{byte})"/>,
     /// will be used to reverse the buffer slice.
     /// </para>
     /// </summary>
@@ -257,7 +257,7 @@ public ref struct RevrsReader(Span<byte> data, Endianness endianness = Endiannes
     /// <summary>
     /// Read <typeparamref name="T"/> from the provided <paramref name="offset"/> and advance forward by <see langword="sizeof"/>(<typeparamref name="T"/>).
     /// <para>
-    /// <typeparamref name="TReverser"/>, implementing <see name="IReversablerseable.Reverse(in Span{byte})"/>,
+    /// <typeparamref name="TReverser"/>, implementing <see name="IStructReverser.Reverse(in Span{byte})"/>,
     /// will be used to reverse the buffer slice when endian swapping is required.
     /// </para>
     /// </summary>
@@ -291,7 +291,7 @@ public ref struct RevrsReader(Span<byte> data, Endianness endianness = Endiannes
     /// <summary>
     /// Reverse <typeparamref name="T"/> from the provided <paramref name="offset"/> and advance forward by <see langword="sizeof"/>(<typeparamref name="T"/>).
     /// <para>
-    /// <typeparamref name="TReverser"/>, implementing <see name="IReversablerseable.Reverse(in Span{byte})"/>,
+    /// <typeparamref name="TReverser"/>, implementing <see name="IStructReverser.Reverse(in Span{byte})"/>,
     /// will be used to reverse the buffer slice.
     /// </para>
     /// </summary>
@@ -391,7 +391,7 @@ public ref struct RevrsReader(Span<byte> data, Endianness endianness = Endiannes
     /// <summary>
     /// Read <paramref name="count"/> <typeparamref name="T"/>'s from the readers current position and advance forward by <see langword="sizeof"/>(<typeparamref name="T"/>) * <paramref name="count"/>.
     /// <para>
-    /// <typeparamref name="TReverser"/>, implementing <see name="IReversablerseable.Reverse(in Span{byte})"/>,
+    /// <typeparamref name="TReverser"/>, implementing <see name="IStructReverser.Reverse(in Span{byte})"/>,
     /// will be used to reverse the buffer slice when endian swapping is required.
     /// </para>
     /// </summary>
@@ -427,7 +427,7 @@ public ref struct RevrsReader(Span<byte> data, Endianness endianness = Endiannes
     /// <summary>
     /// Reverse <paramref name="count"/> <typeparamref name="T"/>'s from the readers current position and advance forward by <see langword="sizeof"/>(<typeparamref name="T"/>) * <paramref name="count"/>.
     /// <para>
-    /// <typeparamref name="TReverser"/>, implementing <see name="IReversablerseable.Reverse(in Span{byte})"/>,
+    /// <typeparamref name="TReverser"/>, implementing <see name="IStructReverser.Reverse(in Span{byte})"/>,
     /// will be used to reverse the buffer slice.
     /// </para>
     /// </summary>
@@ -459,7 +459,7 @@ public ref struct RevrsReader(Span<byte> data, Endianness endianness = Endiannes
     /// <summary>
     /// Read <paramref name="count"/> <typeparamref name="T"/>'s from the provided <paramref name="offset"/> and advance forward by <see langword="sizeof"/>(<typeparamref name="T"/>) * <paramref name="count"/>.
     /// <para>
-    /// <typeparamref name="TReverser"/>, implementing <see name="IReversablerseable.Reverse(in Span{byte})"/>,
+    /// <typeparamref name="TReverser"/>, implementing <see name="IStructReverser.Reverse(in Span{byte})"/>,
     /// will be used to reverse the buffer slice when endian swapping is required.
     /// </para>
     /// </summary>
@@ -497,7 +497,7 @@ public ref struct RevrsReader(Span<byte> data, Endianness endianness = Endiannes
     /// <summary>
     /// Reverse <paramref name="count"/> <typeparamref name="T"/>'s from the provided <paramref name="offset"/> and advance forward by <see langword="sizeof"/>(<typeparamref name="T"/>) * <paramref name="count"/>.
     /// <para>
-    /// <typeparamref name="TReverser"/>, implementing <see name="IReversablerseable.Reverse(in Span{byte})"/>,
+    /// <typeparamref name="TReverser"/>, implementing <see name="IStructReverser.Reverse(in Span{byte})"/>,
     /// will be used to reverse the buffer slice.
     /// </para>
     /// </summary>
