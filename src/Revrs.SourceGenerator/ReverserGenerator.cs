@@ -1,5 +1,4 @@
 using System.Collections.Immutable;
-using System.Diagnostics;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Revrs.SourceGenerator.Builders;
@@ -9,10 +8,7 @@ namespace Revrs.SourceGenerator;
 [Generator(LanguageNames.CSharp)]
 public class ReverserGenerator : IIncrementalGenerator
 {
-    internal const string AttributeTypeName = "Revrs.Attributes.ReversableAttribute";
-    private const string DoNotRemoveAttributeTypeName = "Revrs.Attributes.DoNotRemoveAttribute";
-    private const string StructLayoutAttributeTypeName = "System.Runtime.InteropServices.StructLayoutAttribute";
-    private const string FieldOffsetAttributeTypeName = "System.Runtime.InteropServices.FieldOffsetAttribute";
+    internal const string AttributeTypeName = "Revrs.Attributes.ReversibleAttribute";
 
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {

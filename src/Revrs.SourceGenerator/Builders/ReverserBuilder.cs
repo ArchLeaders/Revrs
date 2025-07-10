@@ -9,14 +9,14 @@ namespace Revrs.SourceGenerator.Builders;
 public class ReverserBuilder(SourceProductionContext context, Compilation compilation)
 {
     private const string StructReverserInterfaceTypeName = "Revrs.IStructReverser";
-    private const string DoNotRemoveAttributeTypeName = "Revrs.Attributes.DoNotReverseAttribute";
+    private const string DoNotReverseAttributeTypeName = "Revrs.Attributes.DoNotReverseAttribute";
     private const string StructLayoutAttributeTypeName = "System.Runtime.InteropServices.StructLayoutAttribute";
     private const string FieldOffsetAttributeTypeName = "System.Runtime.InteropServices.FieldOffsetAttribute";
 
     private readonly SourceProductionContext _context = context;
     private readonly ISymbol _reverserAttribute = compilation.GetTypeByMetadataName(ReverserGenerator.AttributeTypeName)!;
     private readonly ISymbol _structReverserInterface = compilation.GetTypeByMetadataName(StructReverserInterfaceTypeName)!;
-    private readonly ISymbol _doNotReverseAttribute = compilation.GetTypeByMetadataName(DoNotRemoveAttributeTypeName)!;
+    private readonly ISymbol _doNotReverseAttribute = compilation.GetTypeByMetadataName(DoNotReverseAttributeTypeName)!;
     private readonly ISymbol _structLayoutAttribute = compilation.GetTypeByMetadataName(StructLayoutAttributeTypeName)!;
     private readonly ISymbol _fieldOffsetAttribute = compilation.GetTypeByMetadataName(FieldOffsetAttributeTypeName)!;
 
@@ -26,8 +26,8 @@ public class ReverserBuilder(SourceProductionContext context, Compilation compil
             _context.ReportDiagnostic(Diagnostic.Create(
                 new DiagnosticDescriptor(
                     "REVRS-0001",
-                    "Invalid reversable type",
-                    "Types annotated with ReversableAttribute must be unmanaged structures",
+                    "Invalid reversible type",
+                    "Types annotated with ReversibleAttribute must be unmanaged structures",
                     "Reverser Generator",
                     DiagnosticSeverity.Error, true),
                 symbol.Locations.FirstOrDefault())
@@ -139,7 +139,7 @@ public class ReverserBuilder(SourceProductionContext context, Compilation compil
             _context.ReportDiagnostic(Diagnostic.Create(
                 new DiagnosticDescriptor(
                     "REVRS-0002",
-                    "Invalid reversable field type",
+                    "Invalid reversible field type",
                     "Field types must be unmanaged structures (value types)",
                     "Reverser Generator",
                     DiagnosticSeverity.Error, true),
