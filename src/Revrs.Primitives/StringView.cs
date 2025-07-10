@@ -1,5 +1,5 @@
 using System.Runtime.CompilerServices;
-using System.Text;
+using System.Runtime.InteropServices.Marshalling;
 
 namespace Revrs.Primitives;
 
@@ -34,5 +34,10 @@ public readonly ref struct StringView
     public static unsafe implicit operator StringView(byte* ptr) => new(in Unsafe.AsRef<byte>(ptr));
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public override string ToString() => Encoding.UTF8.GetString(Value);
+    public override unsafe string? ToString()
+    {
+        fixed (byte* ptr = Value) {
+            return Utf8StringMarshaller.ConvertToManaged(ptr);
+        }
+    }
 }
