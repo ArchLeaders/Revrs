@@ -103,6 +103,11 @@ public class ReverserBuilder(SourceProductionContext context, Compilation compil
 
         foreach ((int fieldSize, int pack) in fieldSizes) {
             pos += AlignUp(pos, pack);
+
+            if (fieldSize == 1) {
+                continue;
+            }
+            
             sb.Append($"""
                 
                         slice[{pos}..{pos += fieldSize}].Reverse();
