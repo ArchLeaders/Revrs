@@ -55,4 +55,21 @@ public unsafe class AutoGenTests
         ref AutoGenStruct res = ref _dataLe.AsSpan().ReadStruct<AutoGenStruct>(Endianness.Little);
         res.Should().BeEquivalentTo(_struct);
     }
+    
+    private static readonly byte[] _useStructLayoutTestDataBe
+        = "\x5\x4\x3\x2\x5\x4\x3\x2"u8.ToArray();
+    
+    [Fact]
+    public void ShouldUseStructLayoutSize()
+    {
+        var be = new UseDefinedSizeParent {
+            _1 = new UseDefinedSizeChild { A = 0x5040302 },
+            _2 = new UseDefinedSizeChild { A = 0x5040302 }
+        };
+        
+        ref UseDefinedSizeParent res = ref _useStructLayoutTestDataBe.AsSpan()
+            .ReadStruct<UseDefinedSizeParent>(Endianness.Big);
+        
+        res.Should().BeEquivalentTo(be);
+    }
 }

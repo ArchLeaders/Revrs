@@ -71,7 +71,7 @@ public class ReverserBuilder(SourceProductionContext context, Compilation compil
     private void GenerateRevrsForField(StringBuilder sb, IFieldSymbol field, int packSize, ref int pos)
     {
         Span<RevrsSlice> fieldSizes = GetFieldSizes(field, packSize);
-        int totalFieldSize = Sum(fieldSizes);
+        int totalFieldSize = GetTypeSize(field) ?? Sum(fieldSizes);
 
         ImmutableArray<AttributeData> fieldAttributes = field.GetAttributes();
 
@@ -108,6 +108,16 @@ public class ReverserBuilder(SourceProductionContext context, Compilation compil
                         slice[{pos}..{pos += fieldSize}].Reverse();
                 """);
         }
+    }
+
+    private int? GetTypeSize(IFieldSymbol field)
+    {
+        AttributeData? structLayoutAttribute = field.Type
+            .GetAttributes()
+            .FirstOrDefault(x => SymbolEqualityComparer.Default.Equals(x.AttributeClass, _structLayoutAttribute));
+
+        return structLayoutAttribute?.NamedArguments
+            .FirstOrDefault(x => x.Key == nameof(StructLayoutAttribute.Size)).Value.Value as int?;
     }
 
     private int GetPackSize(INamedTypeSymbol symbol)
